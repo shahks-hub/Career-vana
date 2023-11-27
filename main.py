@@ -48,15 +48,18 @@ if tabs == 'Psychographic':
 elif tabs == 'Demographic':
     st.header("Demographic Section")
     selected_factor = st.selectbox('Select a factor', ['gender', 'ethnicity', 'race'])
+    if selected_factor == 'gender':
+        data_visualize_K.loc[~data_visualize_K['gender'].isin(['Male', 'Female']), 'gender'] = 'Other gender'
+        
 
     # Display box plot and pie chart
     st.subheader("Box Plot")
     fig_box = px.box(data_visualize_K, x=selected_factor, y="upper_pay_band_bound", title=f"Pay Distribution by {selected_factor}")
     st.plotly_chart(fig_box)
 
-    st.subheader("Pie Chart")
-    fig_pie = px.histogram(data_visualize_K, x=selected_factor, color="job_category", title=f"Distribution of Job Categories by {selected_factor}")
-    st.plotly_chart(fig_pie)
+    st.subheader("Bar Plot")
+    fig_bar = px.bar(data_visualize_K, x=selected_factor,color="job_category", barmode ="group",title=f"Distribution of Job Categories by {selected_factor}")
+    st.plotly_chart(fig_bar)
 
 # Find Your Perfect Career Sector tab
 elif tabs == 'Find Your Perfect Career Sector':
