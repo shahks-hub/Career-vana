@@ -1,4 +1,4 @@
-# AIdentity: Your Career Hub
+# Career-vana: Your Career Hub
 
 ## Create an environment: 
 ```
@@ -18,6 +18,11 @@ source myenv/bin/activate
 ```
 deactivate
 
+```
+## To run app:
+
+```
+streamlit run main.py
 ```
 
 ## Install everything
