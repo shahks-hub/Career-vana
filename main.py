@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import pickle
-import nltk
+
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer  # Import TfidfVectorizer
 
@@ -43,6 +43,10 @@ if tabs == 'Psychographic':
     st.subheader("Histogram")
     fig_bar = px.histogram(data_visualize_B, x=selected_factor, color="_employment", title=f"Employment by {selected_factor}")
     st.plotly_chart(fig_bar)
+
+elif tabs == 'Geographic':
+    st.write("hello")
+
 
 # Demographic tab
 elif tabs == 'Demographic':
