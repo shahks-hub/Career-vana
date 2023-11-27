@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import pickle
-import nltk
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer  # Import TfidfVectorizer
 
