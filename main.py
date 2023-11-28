@@ -66,8 +66,8 @@ elif tabs == 'Find Your Perfect Career Sector':
     monster_df = pd.read_csv('data/monster.csv')
 
     # Load the model and initialize TfidfVectorizer
-    filename = 'finalized_model.sav'
-    filename2 = 'finalized_vector.sav'
+    filename = 'pickled_models/finalized_model.sav'
+    filename2 = 'pickled_models/finalized_vector.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
     loaded_vector = pickle.load(open(filename2,'rb'))
    
