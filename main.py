@@ -144,7 +144,22 @@ elif tabs == 'Find Your Perfect Career Sector':
     
 
 elif tabs == 'Generate Cover Letter':
-    st.write('hello')
+    st.subheader('Add your Resume and job description to get a tailored cover letter and updated resume.')
+    job_desc = st.text_area("Copy paste the job description you're interested in")
+    
+    # File uploader section
+    uploaded_file = st.file_uploader("Upload your resume", type=["pdf", "docx"])
+    # Check if a file was uploaded
+    if uploaded_file is not None:
+        st.write("File uploaded successfully!")
+    
+    # Process the uploaded file, for example, you can read its contents
+        file_contents = uploaded_file.read()
+    
+    # # Display the file contents
+    #     st.write(file_contents)
+
+
 
 
 
