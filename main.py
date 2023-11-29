@@ -12,7 +12,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 data_visualize_K = pd.read_csv('data/LocalPayNYC.csv')
 data_visualize_B = pd.read_csv('data/emotionalEmployment.csv')
 
-tabs = st.sidebar.radio("Select a tab", ('Geographic', 'Psychographic', 'Demographic', 'Find Your Perfect Career Sector'))
+tabs = st.sidebar.radio("Select a tab", ('Geographic', 'Psychographic', 'Demographic', 'Find Your Perfect Career Sector', 'Generate Cover Letter'))
 
 # Main content
 st.title("Careers influenced by various factors over the years")
@@ -55,15 +55,27 @@ elif tabs == 'Demographic':
     selected_factor = st.selectbox('Select a factor', ['gender', 'ethnicity', 'race'])
     if selected_factor == 'gender':
         data_visualize_K.loc[~data_visualize_K['gender'].isin(['Male', 'Female']), 'gender'] = 'Other gender'
+        description_box = "Observations: People identifying as male tend to have the highest salaries followed by women and other genders."
+        description_bar = "Observations: Highest percentage of all genders are professionals which could also mean that there is just more data on professionals. Some noteworthy comparisons is that there are more men in skilled craft than female and other gender. women least common professions are skilled craft and service maintenance. men least common are technicians and protective service while other genders least common are administrative support, technicians and skilled craft  "
+    elif selected_factor == 'ethnicity':
+        description_box = "Non-hispanic or latino tend to be paid the highest. there may be data bias because of the people choosing not to report their ethnicity"
+        description_bar = "Ignoring the common professionals,Non-hispanic or latino populations tend to work as paraprofessionals and officials/administrators and least in protective service and skilled craft. while hispanic or latinos are generally the same the difference in paraprofessionals and officials in less which means either of those categories are more common, while in non-hispanic/latinos more tend to lean towards paraprofessionals than officials/administrators   "
+    elif selected_factor == 'race':
+        description_box = "highest paid race is White while lowest being native hawaian. again this could just correspond to their populations in the US. Moreover this the chart is only showing upper pay bound the average pay could be a different story."
+        description_bar = "some notable observations would be white working more in skilled craft than other races, asians and black winning the technicians profession, asians and white significantly more administrators/officials than paraprofessionals. "
+
+
         
 
     # Display box plot and pie chart
     st.subheader("Box Plot")
     fig_box = px.box(data_visualize_K, x=selected_factor, y="upper_pay_band_bound", title=f"Pay Distribution by {selected_factor}")
+    st.write(description_box)
     st.plotly_chart(fig_box)
 
     st.subheader("Bar Plot")
     fig_bar = px.bar(data_visualize_K, x=selected_factor,color="job_category", barmode ="group",title=f"Distribution of Job Categories by {selected_factor}")
+    st.write(description_bar)
     st.plotly_chart(fig_bar)
 
 # Find Your Perfect Career Sector tab
@@ -131,6 +143,9 @@ elif tabs == 'Find Your Perfect Career Sector':
             st.write(f"Top 10 Job Titles in '{sector}':")
             st.write(top_jobs)
     
+
+elif tabs == 'Generate Cover Letter':
+    st.write('hello')
 
 
 
