@@ -2,11 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import pickle
-<<<<<<< HEAD
-=======
-
->>>>>>> 911929f3b4877d411332e9f659b26c785f567289
+import pickle 
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer  
 
