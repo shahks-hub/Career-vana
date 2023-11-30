@@ -4,49 +4,85 @@ import numpy as np
 import plotly.express as px
 import pickle 
 import re
+from transformers import AutoTokenizer, AutoModelForCausalLM
+import transformers
+import torch
 from sklearn.feature_extraction.text import TfidfVectorizer  
 
 
 
 data_visualize_K = pd.read_csv('data/LocalPayNYC.csv')
-data_visualize_B = pd.read_csv('data/emotionalEmployment.csv')
+data_visualize_B = pd.read_csv('data/b_data.csv')
 
 tabs = st.sidebar.radio("Select a tab", ('Geographic', 'Psychographic', 'Demographic', 'Find Your Perfect Career Sector', 'Generate Cover Letter'))
 
 # Main content
 st.title("Careers influenced by various factors over the years")
 
+
+
+
+
+
 # Psychographic tab
 if tabs == 'Psychographic':
     st.header("Psychographic Section")
     
-    selected_factor = st.selectbox('Select a factor', ['_agreeableness', '_conscientiousness', '_emotional_stability', '_extroversion', '_openness'])
+    # Create a list of available factors (columns) in the CSV file
+    available_factors = data_visualize_B.columns.tolist()
 
-    # Display multiple box plots
+    # Let the user choose factors (columns) from the CSV file
+    col1, col2, col3 = st.columns(3)  # Create two columns for side-by-side display
+
+    with col1:
+        selected_factor1 = st.selectbox('Select a factor (1)', available_factors, key='factor1')
+        unique_values_factor1 = data_visualize_B[selected_factor1].unique()
+        st.write(f"Unique values in the selected {selected_factor1} column:", unique_values_factor1)
+
+    with col2:
+        selected_factor2 = st.selectbox('Select a factor (2)', available_factors, key='factor2')
+        unique_values_factor2 = data_visualize_B[selected_factor2].unique()
+        st.write(f"Unique values in the selected {selected_factor2} column:", unique_values_factor2)
+        
+    with col3:
+        selected_factor3 = st.selectbox('Select a factor (3)', available_factors, key='factor3')
+        unique_values_factor3 = data_visualize_B[selected_factor3].unique()
+        st.write(f"Unique values in the selected {selected_factor3} column:", unique_values_factor3)
+
+    # Display box plots
     st.subheader("Box Plots")
-    fig_box1 = px.box(data_visualize_B, x=selected_factor, y='50-100k', title=f"{selected_factor} $50-100k")
-    st.plotly_chart(fig_box1)
-
-    fig_box2 = px.box(data_visualize_B, x=selected_factor, y='100-150k', title=f"{selected_factor} $100-150k")
-    st.plotly_chart(fig_box2)
-
-    fig_box3 = px.box(data_visualize_B, x=selected_factor, y='150-200k', title=f"{selected_factor} $150-200k")
-    st.plotly_chart(fig_box3)
-
-    fig_box4 = px.box(data_visualize_B, x=selected_factor, y='200-500k', title=f"{selected_factor} $200-500k")
-    st.plotly_chart(fig_box4)
-
-    fig_box5 = px.box(data_visualize_B, x=selected_factor, y='+500k', title=f"{selected_factor} $500k+")
-    st.plotly_chart(fig_box5)
+    fig_box = px.box(data_visualize_B, x=selected_factor1, y=selected_factor2, title=f"{selected_factor1} {selected_factor2}")
+    st.plotly_chart(fig_box)
 
     # Display histogram
-    st.subheader("Histogram")
-    fig_bar = px.histogram(data_visualize_B, x=selected_factor, color="_employment", title=f"Employment by {selected_factor}")
+    st.subheader("Bar Chart")
+    fig_bar = px.histogram(data_visualize_B,x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"Employment by {selected_factor1}", barmode='group')   
     st.plotly_chart(fig_bar)
+    
+    # Display line graph
+    st.subheader("Line Graph")
+    fig_line = px.line(data_visualize_B, x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"{selected_factor1} {selected_factor2}")
+    st.plotly_chart(fig_line)
+    
+    # Display Scatter 3D graph
+    st.subheader("Scatter 3D Plot")
+    fig_scatter_3d = px.scatter_3d(data_visualize_B, x=selected_factor1, y=selected_factor2, z=selected_factor3, title=f"{selected_factor1} vs {selected_factor2} vs {selected_factor3}")
+    fig_scatter_3d.update_layout(height=800, width=1000)
+    st.plotly_chart(fig_scatter_3d)
+
+
+
+
+
+
+
+
+
+
+
 
 elif tabs == 'Geographic':
     st.write("hello")
-
 
 # Demographic tab
 elif tabs == 'Demographic':
@@ -146,7 +182,7 @@ elif tabs == 'Find Your Perfect Career Sector':
 elif tabs == 'Generate Cover Letter':
     st.subheader('Add your Resume and job description to get a tailored cover letter and updated resume.')
     job_desc = st.text_area("Copy paste the job description you're interested in")
-    
+
     # File uploader section
     uploaded_file = st.file_uploader("Upload your resume", type=["pdf", "docx"])
     # Check if a file was uploaded
@@ -158,13 +194,3 @@ elif tabs == 'Generate Cover Letter':
     
     # # Display the file contents
     #     st.write(file_contents)
-
-
-
-
-
-
-
-
-   
-        
