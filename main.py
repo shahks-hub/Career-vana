@@ -2,12 +2,22 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import pickle 
+import pickle
 import re
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import transformers
 import torch
 from sklearn.feature_extraction.text import TfidfVectorizer  
+import openai
+import os
+from openai import OpenAI
+from PyPDF2 import PdfReader 
+from dotenv import load_dotenv, find_dotenv
+_ = load_dotenv(find_dotenv())
+
+
+
+
 
 
 
@@ -180,9 +190,11 @@ elif tabs == 'Find Your Perfect Career Sector':
     
 
 elif tabs == 'Generate Cover Letter':
-    st.subheader('Add your Resume and job description to get a tailored cover letter and updated resume.')
-    job_desc = st.text_area("Copy paste the job description you're interested in")
 
+    st.subheader('Add your Resume and job description to get a tailored cover letter and updated resume.')
+    
+    job_desc = st.text_area("Copy paste the job description you're interested in")
+    
     # File uploader section
     uploaded_file = st.file_uploader("Upload your resume", type=["pdf", "docx"])
     # Check if a file was uploaded
@@ -194,3 +206,13 @@ elif tabs == 'Generate Cover Letter':
     
     # # Display the file contents
     #     st.write(file_contents)
+
+
+
+
+
+
+
+
+   
+        
