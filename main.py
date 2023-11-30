@@ -3,9 +3,18 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import pickle
-
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer  
+import openai
+import os
+from openai import OpenAI
+from PyPDF2 import PdfReader 
+from dotenv import load_dotenv, find_dotenv
+_ = load_dotenv(find_dotenv())
+
+
+
+
 
 
 
@@ -145,20 +154,48 @@ elif tabs == 'Find Your Perfect Career Sector':
     
 
 elif tabs == 'Generate Cover Letter':
+
     st.subheader('Add your Resume and job description to get a tailored cover letter and updated resume.')
-    job_desc = st.text_area("Copy paste the job description you're interested in")
     
-    # File uploader section
-    uploaded_file = st.file_uploader("Upload your resume", type=["pdf", "docx"])
-    # Check if a file was uploaded
+    job_desc = st.text_area("Copy paste the job description you're interested in")
+   
+    # Display the file contents
+    uploaded_file = st.file_uploader("Upload your resume", type=["pdf"])
+    # # Check if a file was uploaded
     if uploaded_file is not None:
         st.write("File uploaded successfully!")
+        reader = PdfReader(uploaded_file)
+        page = reader.pages[0]
+        text = page.extract_text()
+        
+        
+    if st.button("Generate Cover Letter"):
+       
+        openai.api_key  = os.getenv('OPENAI_API_KEY')
+        client = OpenAI()
     
-    # Process the uploaded file, for example, you can read its contents
-        file_contents = uploaded_file.read()
+        prompt = f"Take this job description: {job_desc} and resume: {text} and write a cover letter."
+
+        def get_completion(prompt, model="gpt-3.5-turbo"):
+            messages = [
+                {"role": "user", "content": "prompt"},
+                {"role": "system", "content": "You are tasked to write cover letters tailored to :{job_desc} and resume: {text}. do not write a generic template, write it according to the job description and cover letter"},
+                ]
+            response = client.chat.completions.create(
+                model=model,
+                messages=messages,
+                temperature=0, 
+            )
+            return response.choices[0].message.content
+       
+        
+        response = get_completion(prompt)
+        st.write(f"Generated Cover Letter: {response}")
+        
+      
+
     
-    # # Display the file contents
-    #     st.write(file_contents)
+
 
 
 
