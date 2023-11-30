@@ -12,7 +12,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 data_visualize_K = pd.read_csv('data/LocalPayNYC.csv')
-data_visualize_B = pd.read_csv('data/b_data.csv')
+data_visualize_B = pd.read_csv('data/b_dataMod.csv')
 
 tabs = st.sidebar.radio("Select a tab", ('Geographic', 'Psychographic', 'Demographic', 'Find Your Perfect Career Sector', 'Generate Cover Letter'))
 
@@ -35,23 +35,23 @@ if tabs == 'Psychographic':
     col1, col2, col3 = st.columns(3)  # Create two columns for side-by-side display
 
     with col1:
-        selected_factor1 = st.selectbox('Select a factor (1)', available_factors, key='factor1')
+        selected_factor1 = st.selectbox('Please select either Sector or Salary', available_factors, key='factor1')
         unique_values_factor1 = data_visualize_B[selected_factor1].unique()
         st.write(f"Unique values in the selected {selected_factor1} column:", unique_values_factor1)
 
     with col2:
-        selected_factor2 = st.selectbox('Select a factor (2)', available_factors, key='factor2')
+        selected_factor2 = st.selectbox('Please select a Personality Attribute', available_factors, key='factor2')
         unique_values_factor2 = data_visualize_B[selected_factor2].unique()
         st.write(f"Unique values in the selected {selected_factor2} column:", unique_values_factor2)
         
     with col3:
-        selected_factor3 = st.selectbox('Select a factor (3)', available_factors, key='factor3')
+        selected_factor3 = st.selectbox('Please select either Sector or Salary', available_factors, key='factor3')
         unique_values_factor3 = data_visualize_B[selected_factor3].unique()
         st.write(f"Unique values in the selected {selected_factor3} column:", unique_values_factor3)
 
     # Display box plots
     st.subheader("Box Plots")
-    fig_box = px.box(data_visualize_B, x=selected_factor1, y=selected_factor2, title=f"{selected_factor1} {selected_factor2}")
+    fig_box = px.box(data_visualize_B, x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"{selected_factor1} {selected_factor2}")
     st.plotly_chart(fig_box)
 
     # Display histogram
