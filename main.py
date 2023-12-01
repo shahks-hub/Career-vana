@@ -2,12 +2,20 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import pickle 
+import pickle
 import re
-from transformers import AutoTokenizer, AutoModelForCausalLM
-import transformers
-import torch
 from sklearn.feature_extraction.text import TfidfVectorizer  
+import openai
+import os
+from openai import OpenAI
+from PyPDF2 import PdfReader 
+import requests
+from dotenv import load_dotenv, find_dotenv
+_ = load_dotenv(find_dotenv())
+
+
+
+
 
 
 
@@ -72,7 +80,51 @@ if tabs == 'Psychographic':
     st.plotly_chart(fig_scatter_3d)
 
 elif tabs == 'Geographic':
-    st.write("hello")
+    st.header("Geographic Section")
+
+    # Load data
+    df = pd.read_csv('data/mock_data.csv')
+
+   
+    sectors = st.multiselect('Select Employment Sectors', df['employment_sector'].unique())
+    if not sectors:
+        filtered_df = df
+    else:
+        filtered_df = df[df['employment_sector'].isin(sectors)]
+
+    
+    state_counts = filtered_df['state'].value_counts().reset_index()
+    state_counts.columns = ['state', 'count']
+    state_avg_salary = filtered_df.groupby('state')['salary'].mean().reset_index()
+
+
+    map_color = st.selectbox('Select Map Color', ['Viridis', 'Cividis', 'Plasma', 'Inferno'])
+
+    
+    map_option = st.selectbox('Select what to display on the map', ['Number of Entries', 'Average Salary'])
+
+    
+if map_option == 'Number of Entries':
+    fig = px.choropleth(state_counts, 
+                        locations='state', 
+                        color='count',  
+                        color_continuous_scale=map_color,
+                        scope="usa",
+                        title='Number of Entries per State')
+    st.plotly_chart(fig)
+elif map_option == 'Average Salary':
+    fig = px.choropleth(state_avg_salary, 
+                        locations='state',  
+                        locationmode="USA-states", 
+                        color='salary',  
+                        color_continuous_scale=map_color,
+                        scope="usa",
+                        title='Average Salary per State')
+    st.plotly_chart(fig)
+
+
+
+    
 
 # Demographic tab
 elif tabs == 'Demographic':
@@ -170,17 +222,76 @@ elif tabs == 'Find Your Perfect Career Sector':
     
 
 elif tabs == 'Generate Cover Letter':
+
     st.subheader('Add your Resume and job description to get a tailored cover letter and updated resume.')
+    
     job_desc = st.text_area("Copy paste the job description you're interested in")
 
-    # File uploader section
-    uploaded_file = st.file_uploader("Upload your resume", type=["pdf", "docx"])
-    # Check if a file was uploaded
+   
+    uploaded_file = st.file_uploader("Upload your resume", type=["pdf"])
+    
+
     if uploaded_file is not None:
         st.write("File uploaded successfully!")
+        reader = PdfReader(uploaded_file)
+        page = reader.pages[0]
+        text = page.extract_text()
     
-    # Process the uploaded file, for example, you can read its contents
+    st.title("Extract Text from Image")
+    uploaded_file_image = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
+
+    API_URL = "https://api-inference.huggingface.co/models/jinhybr/OCR-Donut-CORD"
+    API_TOKEN = os.getenv('API_TOKEN')  # Replace with your Hugging Face API token
+
+    def query(filename):
+        headers = {"Authorization": f"Bearer {API_TOKEN}"}
+        with open(filename, "rb") as f:
+            data = f.read()
+        response = requests.post(API_URL, headers=headers, data=data)
+        return response.json()
+
+    if uploaded_file_image is not None:
+        st.image(uploaded_file_image, caption='Uploaded Image', use_column_width=True)
+        if st.button("Extract Text"):
+            try:
+                image_bytes = uploaded_file_image.read()
+                extracted_text = query(image_bytes)
+                st.subheader("Extracted Text:")
+                st.write(extracted_text)
+            except Exception as e:
+                st.error(f"Error: {e}")
+    
+
+    
+    if st.button("Generate Cover Letter"):
+
+        openai.api_key  = os.getenv('OPENAI_API_KEY')
+        client = OpenAI()
         file_contents = uploaded_file.read()
+        prompt = f"Take this job description: {job_desc} and resume: {text} and write a cover letter."
+
+        def get_completion(prompt, model="gpt-3.5-turbo"):
+            messages = [
+                {"role": "user", "content": "prompt"},
+                {"role": "system", "content": "You are tasked to write cover letters tailored to :{job_desc} and resume: {text}. do not write a generic template, write it according to the job description and cover letter"},
+                ]
+            response = client.chat.completions.create(
+                model=model,
+                messages=messages,
+                temperature=0, 
+                )
+            return response.choices[0].message.content
+
+        response = get_completion(prompt)
+        st.write(f"Generated Cover Letter: {response}")
+
     
-    # # Display the file contents
-    #     st.write(file_contents)
+   
+
+
+
+
+
+
+   
+        
