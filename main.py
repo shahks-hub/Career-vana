@@ -9,6 +9,7 @@ import openai
 import os
 from openai import OpenAI
 from PyPDF2 import PdfReader 
+import requests
 from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())
 
@@ -194,12 +195,40 @@ elif tabs == 'Generate Cover Letter':
 
    
     uploaded_file = st.file_uploader("Upload your resume", type=["pdf"])
-   
+    
+
     if uploaded_file is not None:
         st.write("File uploaded successfully!")
         reader = PdfReader(uploaded_file)
         page = reader.pages[0]
         text = page.extract_text()
+    
+    st.title("Extract Text from Image")
+    uploaded_file_image = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
+
+    API_URL = "https://api-inference.huggingface.co/models/jinhybr/OCR-Donut-CORD"
+    API_TOKEN = os.getenv('API_TOKEN')  # Replace with your Hugging Face API token
+
+    def query(filename):
+        headers = {"Authorization": f"Bearer {API_TOKEN}"}
+        with open(filename, "rb") as f:
+            data = f.read()
+        response = requests.post(API_URL, headers=headers, data=data)
+        return response.json()
+
+    if uploaded_file_image is not None:
+        st.image(uploaded_file_image, caption='Uploaded Image', use_column_width=True)
+        if st.button("Extract Text"):
+            try:
+                image_bytes = uploaded_file_image.read()
+                extracted_text = query(image_bytes)
+                st.subheader("Extracted Text:")
+                st.write(extracted_text)
+            except Exception as e:
+                st.error(f"Error: {e}")
+    
+
+    
     if st.button("Generate Cover Letter"):
 
         openai.api_key  = os.getenv('OPENAI_API_KEY')
