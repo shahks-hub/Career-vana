@@ -19,11 +19,6 @@ tabs = st.sidebar.radio("Select a tab", ('Geographic', 'Psychographic', 'Demogra
 # Main content
 st.title("Careers influenced by various factors over the years")
 
-
-
-
-
-
 # Psychographic tab
 if tabs == 'Psychographic':
     st.header("Psychographic Section")
@@ -64,22 +59,17 @@ if tabs == 'Psychographic':
     fig_line = px.line(data_visualize_B, x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"{selected_factor1} {selected_factor2}")
     st.plotly_chart(fig_line)
     
+    # # Display Scatter 3D graph
+    # st.subheader("Line 3D Chart")
+    # fig_line_3d = px.line_3d(data_visualize_B, x=selected_factor1, y=selected_factor2, z=selected_factor3, title=f"{selected_factor1} vs {selected_factor2} vs {selected_factor3}")
+    # fig_line_3d.update_layout(height=800, width=1000)
+    # st.plotly_chart(fig_line_3d)
+    
     # Display Scatter 3D graph
     st.subheader("Scatter 3D Plot")
     fig_scatter_3d = px.scatter_3d(data_visualize_B, x=selected_factor1, y=selected_factor2, z=selected_factor3, title=f"{selected_factor1} vs {selected_factor2} vs {selected_factor3}")
     fig_scatter_3d.update_layout(height=800, width=1000)
     st.plotly_chart(fig_scatter_3d)
-
-
-
-
-
-
-
-
-
-
-
 
 elif tabs == 'Geographic':
     st.write("hello")
