@@ -89,7 +89,51 @@ if tabs == 'Psychographic':
 
 
 elif tabs == 'Geographic':
-    st.write("hello")
+    st.header("Geographic Section")
+
+    # Load data
+    df = pd.read_csv('data/mock_data.csv')
+
+   
+    sectors = st.multiselect('Select Employment Sectors', df['employment_sector'].unique())
+    if not sectors:
+        filtered_df = df
+    else:
+        filtered_df = df[df['employment_sector'].isin(sectors)]
+
+    
+    state_counts = filtered_df['state'].value_counts().reset_index()
+    state_counts.columns = ['state', 'count']
+    state_avg_salary = filtered_df.groupby('state')['salary'].mean().reset_index()
+
+
+    map_color = st.selectbox('Select Map Color', ['Viridis', 'Cividis', 'Plasma', 'Inferno'])
+
+    
+    map_option = st.selectbox('Select what to display on the map', ['Number of Entries', 'Average Salary'])
+
+    
+if map_option == 'Number of Entries':
+    fig = px.choropleth(state_counts, 
+                        locations='state', 
+                        color='count',  
+                        color_continuous_scale=map_color,
+                        scope="usa",
+                        title='Number of Entries per State')
+    st.plotly_chart(fig)
+elif map_option == 'Average Salary':
+    fig = px.choropleth(state_avg_salary, 
+                        locations='state',  
+                        locationmode="USA-states", 
+                        color='salary',  
+                        color_continuous_scale=map_color,
+                        scope="usa",
+                        title='Average Salary per State')
+    st.plotly_chart(fig)
+
+
+
+    
 
 # Demographic tab
 elif tabs == 'Demographic':
