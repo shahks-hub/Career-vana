@@ -81,14 +81,6 @@ if tabs == 'Psychographic':
 
 
 
-
-
-
-
-
-
-
-
 elif tabs == 'Geographic':
     st.header("Geographic Section")
 
@@ -114,23 +106,23 @@ elif tabs == 'Geographic':
     map_option = st.selectbox('Select what to display on the map', ['Number of Entries', 'Average Salary'])
 
     
-if map_option == 'Number of Entries':
-    fig = px.choropleth(state_counts, 
+    if map_option == 'Number of Entries':
+        fig = px.choropleth(state_counts, 
                         locations='state', 
                         color='count',  
                         color_continuous_scale=map_color,
                         scope="usa",
                         title='Number of Entries per State')
-    st.plotly_chart(fig)
-elif map_option == 'Average Salary':
-    fig = px.choropleth(state_avg_salary, 
+        st.plotly_chart(fig)
+    elif map_option == 'Average Salary':
+        fig = px.choropleth(state_avg_salary, 
                         locations='state',  
                         locationmode="USA-states", 
                         color='salary',  
                         color_continuous_scale=map_color,
                         scope="usa",
                         title='Average Salary per State')
-    st.plotly_chart(fig)
+        st.plotly_chart(fig)
 
 
 
