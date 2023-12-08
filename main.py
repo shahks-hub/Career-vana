@@ -79,6 +79,9 @@ if tabs == 'Psychographic':
     fig_scatter_3d.update_layout(height=800, width=1000)
     st.plotly_chart(fig_scatter_3d)
 
+
+
+
 elif tabs == 'Geographic':
     st.header("Geographic Section")
 
@@ -104,23 +107,23 @@ elif tabs == 'Geographic':
     map_option = st.selectbox('Select what to display on the map', ['Number of Entries', 'Average Salary'])
 
     
-if map_option == 'Number of Entries':
-    fig = px.choropleth(state_counts, 
+    if map_option == 'Number of Entries':
+        fig = px.choropleth(state_counts, 
                         locations='state', 
                         color='count',  
                         color_continuous_scale=map_color,
                         scope="usa",
                         title='Number of Entries per State')
-    st.plotly_chart(fig)
-elif map_option == 'Average Salary':
-    fig = px.choropleth(state_avg_salary, 
+        st.plotly_chart(fig)
+    elif map_option == 'Average Salary':
+        fig = px.choropleth(state_avg_salary, 
                         locations='state',  
                         locationmode="USA-states", 
                         color='salary',  
                         color_continuous_scale=map_color,
                         scope="usa",
                         title='Average Salary per State')
-    st.plotly_chart(fig)
+        st.plotly_chart(fig)
 
 
 
@@ -222,13 +225,52 @@ elif tabs == 'Find Your Perfect Career Sector':
     
 
 elif tabs == 'Generate Cover Letter':
+    API_URL = "https://api-inference.huggingface.co/models/Sachinkelenjaguri/resume_classifier"
+    API_TOKEN = os.getenv('API_TOKEN')  
+    openai.api_key  = os.getenv('OPENAI_API_KEY')
+    client = OpenAI()
+    MAX_SEQUENCE_LENGTH = 512
 
-    st.subheader('Add your Resume and job description to get a tailored cover letter and updated resume.')
+
+    st.subheader('Add your Resume and job description to get a tailored cover letter')
     
     job_desc = st.text_area("Copy paste the job description you're interested in")
 
    
     uploaded_file = st.file_uploader("Upload your resume", type=["pdf"])
+    # Mapping of labels to sector names
+   
+    # Function to get sector name from label
+    def get_sector_name(label):
+        label_to_sector = {
+            'LABEL_0': 'Advocate',
+            'LABEL_1': 'Arts',
+            'LABEL_2': 'Automation Testing',
+            'LABEL_3': 'Blockchain',
+            'LABEL_4': 'Business Analyst',
+            'LABEL_5': 'Civil Engineer',
+            'LABEL_6': 'Data Science',
+            'LABEL_7': 'Database',
+            'LABEL_8': 'DevOps Engineer',
+            'LABEL_9': 'DotNet Developer',
+            'LABEL_10': 'ETL Developer',
+            'LABEL_11': 'Electrical Engineering',
+            'LABEL_12': 'HR',
+            'LABEL_13': 'Hadoop',
+            'LABEL_14': 'Health and fitness',
+            'LABEL_15': 'Java Developer',
+            'LABEL_16': 'Mechanical Engineer',
+            'LABEL_17': 'Network Security Engineer',
+            'LABEL_18': 'Operations Manager',
+            'LABEL_19': 'PMO',
+            'LABEL_20': 'Python Developer',
+            'LABEL_21': 'SAP Developer',
+            'LABEL_22': 'Sales',
+            'LABEL_23': 'Testing',
+            'LABEL_24': 'Web Designing'
+        }
+        return label_to_sector.get(label, 'Unknown')
+
     
 
     if uploaded_file is not None:
@@ -236,47 +278,28 @@ elif tabs == 'Generate Cover Letter':
         reader = PdfReader(uploaded_file)
         page = reader.pages[0]
         text = page.extract_text()
+
     
-    st.title("Extract Text from Image")
-    uploaded_file_image = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
+            # Function to extract top 5 classifications
+    def extract_top_5(classification_responses):
+        top_5_classifications = []
+        for response in classification_responses:
+            response_json = response.json()
+            response_json.sort(key=lambda x: x['score'], reverse=True)  # Sort responses based on score
+            top_5_classifications.extend(response_json[:5]) 
+            
+        top_5_classifications.sort(key=lambda x: x['score'], reverse=True)
+        top_5_with_sectors = [{'sector': get_sector_name(classification['label']), 'score': classification['score']} for classification in top_5_classifications[:5]]
+        return top_5_with_sectors  
 
-    API_URL = "https://api-inference.huggingface.co/models/jinhybr/OCR-Donut-CORD"
-    API_TOKEN = os.getenv('API_TOKEN')  # Replace with your Hugging Face API token
-
-    def query(filename):
-        headers = {"Authorization": f"Bearer {API_TOKEN}"}
-        with open(filename, "rb") as f:
-            data = f.read()
-        response = requests.post(API_URL, headers=headers, data=data)
-        return response.json()
-
-    if uploaded_file_image is not None:
-        st.image(uploaded_file_image, caption='Uploaded Image', use_column_width=True)
-        if st.button("Extract Text"):
-            try:
-                image_bytes = uploaded_file_image.read()
-                extracted_text = query(image_bytes)
-                st.subheader("Extracted Text:")
-                st.write(extracted_text)
-            except Exception as e:
-                st.error(f"Error: {e}")
-    
 
     
     if st.button("Generate Cover Letter"):
-
-        openai.api_key  = os.getenv('OPENAI_API_KEY')
-        client = OpenAI()
-        file_contents = uploaded_file.read()
-        prompt = f"Take this job description: {job_desc} and resume: {text} and write a cover letter."
-
-        def get_completion(prompt, model="gpt-3.5-turbo"):
-            messages = [
-                {"role": "user", "content": "prompt"},
-                {"role": "system", "content": "You are tasked to write cover letters tailored to :{job_desc} and resume: {text}. do not write a generic template, write it according to the job description and cover letter"},
-                ]
+         if job_desc and uploaded_file is not None:
+            prompt = f"Take this job description: {job_desc} and resume: {text} and write a cover letter tailored to it. Extract previous experience, skills, education, email, address from the resume and extract the company name and what they require from the job description"
+            messages = [{"role": "user", "content": prompt}]
             response = client.chat.completions.create(
-                model=model,
+                model="gpt-3.5-turbo",
                 messages=messages,
                 temperature=0, 
                 )
@@ -284,3 +307,14 @@ elif tabs == 'Generate Cover Letter':
 
         response = get_completion(prompt)
         st.write(f"Generated Cover Letter: {response}")
+
+    
+   
+
+
+
+
+
+
+   
+        
