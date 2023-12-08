@@ -271,7 +271,7 @@ elif tabs == 'Generate Cover Letter':
         return label_to_sector.get(label, 'Unknown')
 
     
-
+    #extract text from pdf
     if uploaded_file is not None:
         st.write("File uploaded successfully!")
         reader = PdfReader(uploaded_file)
@@ -284,8 +284,10 @@ elif tabs == 'Generate Cover Letter':
         top_5_classifications = []
         for response in classification_responses:
             response_json = response.json()
-            response_json.sort(key=lambda x: x['score'], reverse=True)  # Sort responses based on score
-            top_5_classifications.extend(response_json[:5]) 
+            sorted_responses = sorted(response_json, key=lambda x: x['score'], reverse=True)  # Sort responses based on score
+            top_5_classifications.extend(sorted_responses[:5]) 
+            # response_json.sort(key=lambda x: x['score'], reverse=True)  # Sort responses based on score
+            # top_5_classifications.extend(response_json[:5]) 
             
         top_5_classifications.sort(key=lambda x: x['score'], reverse=True)
         top_5_with_sectors = [{'sector': get_sector_name(classification['label']), 'score': classification['score']} for classification in top_5_classifications[:5]]
