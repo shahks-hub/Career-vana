@@ -27,11 +27,6 @@ tabs = st.sidebar.radio("Select a tab", ('Geographic', 'Psychographic', 'Demogra
 # Main content
 st.title("Careers influenced by various factors over the years")
 
-
-
-
-
-
 # Psychographic tab
 if tabs == 'Psychographic':
     st.header("Psychographic Section")
@@ -43,17 +38,17 @@ if tabs == 'Psychographic':
     col1, col2, col3 = st.columns(3)  # Create two columns for side-by-side display
 
     with col1:
-        selected_factor1 = st.selectbox('Please select either Sector or Salary', available_factors, key='factor1')
+        selected_factor1 = st.selectbox('This factor appears on X-Axis', available_factors, key='factor1')
         unique_values_factor1 = data_visualize_B[selected_factor1].unique()
         st.write(f"Unique values in the selected {selected_factor1} column:", unique_values_factor1)
 
     with col2:
-        selected_factor2 = st.selectbox('Please select a Personality Attribute', available_factors, key='factor2')
+        selected_factor2 = st.selectbox('This factor appears on Y-Axis', available_factors, key='factor2')
         unique_values_factor2 = data_visualize_B[selected_factor2].unique()
         st.write(f"Unique values in the selected {selected_factor2} column:", unique_values_factor2)
         
     with col3:
-        selected_factor3 = st.selectbox('Please select either Sector or Salary', available_factors, key='factor3')
+        selected_factor3 = st.selectbox('This factor provides color', available_factors, key='factor3')
         unique_values_factor3 = data_visualize_B[selected_factor3].unique()
         st.write(f"Unique values in the selected {selected_factor3} column:", unique_values_factor3)
 
@@ -71,6 +66,12 @@ if tabs == 'Psychographic':
     st.subheader("Line Graph")
     fig_line = px.line(data_visualize_B, x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"{selected_factor1} {selected_factor2}")
     st.plotly_chart(fig_line)
+    
+    # Display Scatter 3D graph
+    st.subheader("Line 3D Chart")
+    fig_line_3d = px.line_3d(data_visualize_B, x=selected_factor1, y=selected_factor2, z=selected_factor3, title=f"{selected_factor1} vs {selected_factor2} vs {selected_factor3}")
+    fig_line_3d.update_layout(height=800, width=1000)
+    st.plotly_chart(fig_line_3d)
     
     # Display Scatter 3D graph
     st.subheader("Scatter 3D Plot")
@@ -302,52 +303,14 @@ elif tabs == 'Generate Cover Letter':
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=messages,
-                temperature=0
-            )
-            st.write(f"Generated Cover Letter: {response.choices[0].message.content}")
+                temperature=0, 
+                )
+            return response.choices[0].message.content
 
-         else:
-            st.write("Please fill in the job description and upload a resume before generating a cover letter.")
+        response = get_completion(prompt)
+        st.write(f"Generated Cover Letter: {response}")
 
-
-
-    if st.button("Classify your Resume"):
-        if uploaded_file is not None:
-            if len(text) > MAX_SEQUENCE_LENGTH:
-                chunks = [text[i:i+MAX_SEQUENCE_LENGTH] for i in range(0, len(text), MAX_SEQUENCE_LENGTH)]
-                responses = []
-                for chunk in chunks:
-                    data = {"text": chunk}  # Adjust payload structure as per API requirements
-                    response = requests.post(API_URL, headers={"Authorization": f"Bearer {API_TOKEN}"}, json=data)
-                    responses.append(response)
-               
-                top_5_classifications = extract_top_5(responses)  # Function to extract top 5 classifications
-                st.write(f"Top 5 Resume Classifications:")
-                for classification in top_5_classifications:
-                    st.write(f"Sector: {classification['sector']}, Score: {classification['score']}")
-          
-
-                
-              
-            else:
-                 data = {"text": text}
-                 response = requests.post(API_URL, headers={"Authorization": f"Bearer {API_TOKEN}"}, json=data)
-                 st.write(f"Resume Classification: {response.text}")
-
-        else:
-            st.write("Please upload a resume first.")
-        
-
-
-
-
-
-
-
-
-
-
-
+    
    
 
 
