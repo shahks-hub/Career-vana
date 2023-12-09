@@ -157,9 +157,11 @@ elif tabs == 'Demographic':
     st.write(description_bar)
     st.plotly_chart(fig_bar)
 
+
+
 # Find Your Perfect Career Sector tab
 elif tabs == 'Find Your Perfect Career Sector':
-    monster_df = pd.read_csv('data/monster.csv')
+    monster_df = pd.read_csv('data/monster_jobs.csv')
 
     # Load the model and initialize TfidfVectorizer
     filename = 'pickled_models/finalized_model.sav'
@@ -202,19 +204,27 @@ elif tabs == 'Find Your Perfect Career Sector':
         for i, (predicted_class, probability) in enumerate(top_predictions, start=1):
             st.write(f"Prediction {i}: Career path '{predicted_class}'")
 
+
+
+         ####VISUALIZATIONS START HERE
             # Filter dataset by predicted sectors
         selected_sectors = [pred[0] for pred in top_predictions]
         filtered_df = monster_df[monster_df['sector'].isin(selected_sectors)]
+
+        
+        ###MAKE PIE CHARTS FOR PREDICTED SECTORS - henry you can try to use this logic to make maps instead
         st.subheader("Top States in Predicted Sectors")
         for sector in selected_sectors:
             sector_df = filtered_df[filtered_df['sector'] == sector]
-            states_count = sector_df['location'].apply(lambda x: x.split(',')[1].strip() if len(x.split(',')) >= 2 else x.strip()).value_counts()
-            top_states = states_count.head(10)
+            states_count = sector_df['cleaned_states'].value_counts().head(10)
         
-        # Create pie chart
-            fig_pie = px.pie(values=top_states.values, names=top_states.index, title=f"Top 10 States in '{sector}'")
+        ###pie charts plotting here
+            fig_pie = px.pie(values=states_count.values, names=states_count.index, title=f"Top 10 States in '{sector}'")
             st.plotly_chart(fig_pie)
- 
+        
+    
+
+
      # Display top 10 job titles in each predicted sector
         st.subheader("Top 10 Job Titles in Predicted Sectors")
         for sector in selected_sectors:
