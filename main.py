@@ -307,16 +307,5 @@ elif tabs == 'Generate Cover Letter':
                 )
             return response.choices[0].message.content
 
-        response = get_completion(prompt)
-        st.write(f"Generated Cover Letter: {response}")
-
-    
-   
-
-
-
-
-
-
-   
-        
+    response = get_completion(prompt)
+    st.write(f"Generated Cover Letter: {response}")
