@@ -10,6 +10,7 @@ import os
 from openai import OpenAI
 from PyPDF2 import PdfReader 
 import requests
+import base64
 from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())
 
@@ -158,9 +159,11 @@ elif tabs == 'Demographic':
     st.write(description_bar)
     st.plotly_chart(fig_bar)
 
+
+
 # Find Your Perfect Career Sector tab
 elif tabs == 'Find Your Perfect Career Sector':
-    monster_df = pd.read_csv('data/monster.csv')
+    monster_df = pd.read_csv('data/monster_jobs.csv')
 
     # Load the model and initialize TfidfVectorizer
     filename = 'pickled_models/finalized_model.sav'
@@ -203,19 +206,27 @@ elif tabs == 'Find Your Perfect Career Sector':
         for i, (predicted_class, probability) in enumerate(top_predictions, start=1):
             st.write(f"Prediction {i}: Career path '{predicted_class}'")
 
+
+
+         ####VISUALIZATIONS START HERE
             # Filter dataset by predicted sectors
         selected_sectors = [pred[0] for pred in top_predictions]
         filtered_df = monster_df[monster_df['sector'].isin(selected_sectors)]
+
+        
+        ###MAKE PIE CHARTS FOR PREDICTED SECTORS - henry you can try to use this logic to make maps instead
         st.subheader("Top States in Predicted Sectors")
         for sector in selected_sectors:
             sector_df = filtered_df[filtered_df['sector'] == sector]
-            states_count = sector_df['location'].apply(lambda x: x.split(',')[1].strip() if len(x.split(',')) >= 2 else x.strip()).value_counts()
-            top_states = states_count.head(10)
+            states_count = sector_df['cleaned_states'].value_counts().head(10)
         
-        # Create pie chart
-            fig_pie = px.pie(values=top_states.values, names=top_states.index, title=f"Top 10 States in '{sector}'")
+        ###pie charts plotting here
+            fig_pie = px.pie(values=states_count.values, names=states_count.index, title=f"Top 10 States in '{sector}'")
             st.plotly_chart(fig_pie)
- 
+        
+    
+
+
      # Display top 10 job titles in each predicted sector
         st.subheader("Top 10 Job Titles in Predicted Sectors")
         for sector in selected_sectors:
@@ -238,74 +249,129 @@ elif tabs == 'Generate Cover Letter':
 
    
     uploaded_file = st.file_uploader("Upload your resume", type=["pdf"])
-    # Mapping of labels to sector names
-   
-    # Function to get sector name from label
-    def get_sector_name(label):
-        label_to_sector = {
-            'LABEL_0': 'Advocate',
-            'LABEL_1': 'Arts',
-            'LABEL_2': 'Automation Testing',
-            'LABEL_3': 'Blockchain',
-            'LABEL_4': 'Business Analyst',
-            'LABEL_5': 'Civil Engineer',
-            'LABEL_6': 'Data Science',
-            'LABEL_7': 'Database',
-            'LABEL_8': 'DevOps Engineer',
-            'LABEL_9': 'DotNet Developer',
-            'LABEL_10': 'ETL Developer',
-            'LABEL_11': 'Electrical Engineering',
-            'LABEL_12': 'HR',
-            'LABEL_13': 'Hadoop',
-            'LABEL_14': 'Health and fitness',
-            'LABEL_15': 'Java Developer',
-            'LABEL_16': 'Mechanical Engineer',
-            'LABEL_17': 'Network Security Engineer',
-            'LABEL_18': 'Operations Manager',
-            'LABEL_19': 'PMO',
-            'LABEL_20': 'Python Developer',
-            'LABEL_21': 'SAP Developer',
-            'LABEL_22': 'Sales',
-            'LABEL_23': 'Testing',
-            'LABEL_24': 'Web Designing'
-        }
-        return label_to_sector.get(label, 'Unknown')
-
     
-    #extract text from pdf
+     #extract text from pdf
     if uploaded_file is not None:
         st.write("File uploaded successfully!")
         reader = PdfReader(uploaded_file)
         page = reader.pages[0]
         text = page.extract_text()
 
-    
-            # Function to extract top 5 classifications
+   
+    def get_sector_name(label):
+        label_to_sector = {
+            'LABEL_0': 'Advocate',
+            'LABEL_1': 'Arts',
+            'LABEL_2': 'Automation Testing',
+            'LABEL_3': 'Blockchain Engineer',
+            'LABEL_4': 'Business Analyst',
+            'LABEL_5': 'Civil Engineer',
+            'LABEL_6': 'Data Science',
+            'LABEL_7': 'Database Management',
+            'LABEL_8': 'DevOps Engineer',
+            'LABEL_9': 'DotNet Developer',
+            'LABEL_10': 'ETL Developer',
+            'LABEL_11': 'Electrical Engineering',
+            'LABEL_12': 'HR',
+            'LABEL_13': 'Hadoop Developer',
+            'LABEL_14': 'Health and fitness',
+            'LABEL_15': 'Java Developer',
+            'LABEL_16': 'Mechanical Engineer',
+            'LABEL_17': 'Network Security Engineer',
+            'LABEL_18': 'Operations Manager',
+            'LABEL_19': 'Project Management',
+            'LABEL_20': 'Python Developer',
+            'LABEL_21': 'SAP Developer',
+            'LABEL_22': 'Sales',
+            'LABEL_23': 'Testing Operations',
+            'LABEL_24': 'Web Designing'
+        }
+        return label_to_sector.get(label, 'Chilling/Unknown')
+
+
     def extract_top_5(classification_responses):
-        top_5_classifications = []
-        for response in classification_responses:
-            response_json = response.json()
-            sorted_responses = sorted(response_json, key=lambda x: x['score'], reverse=True)  # Sort responses based on score
-            top_5_classifications.extend(sorted_responses[:5]) 
-            # response_json.sort(key=lambda x: x['score'], reverse=True)  # Sort responses based on score
-            # top_5_classifications.extend(response_json[:5]) 
-            
-        top_5_classifications.sort(key=lambda x: x['score'], reverse=True)
-        top_5_with_sectors = [{'sector': get_sector_name(classification['label']), 'score': classification['score']} for classification in top_5_classifications[:5]]
-        return top_5_with_sectors  
+        if isinstance(classification_responses, list):
+            top_5_classifications = []
+            for response in classification_responses:
+                response_json = response.json()
+                sorted_responses = sorted(response_json, key=lambda x: x['score'], reverse=True)
+                top_5_classifications.extend(sorted_responses[:5])
+
+            top_5_classifications.sort(key=lambda x: x['score'], reverse=True)
+    
+            unique_sectors = set()
+            top_5_unique_sectors = []
+            for classification in top_5_classifications:
+                sector = get_sector_name(classification['label'])
+                if sector not in unique_sectors:
+                    unique_sectors.add(sector)
+                    top_5_unique_sectors.append({'sector': sector})
+                    if len(top_5_unique_sectors) == 5:
+                        break
+    
+            return top_5_unique_sectors
+        else:
+            response_json = classification_responses.json()
+            sorted_responses = sorted(response_json, key=lambda x: x['score'], reverse=True)
+            top_5_classifications = sorted_responses[:5]
+        
+            unique_sectors = set()
+            top_5_unique_sectors = []
+            for classification in top_5_classifications:
+                sector = get_sector_name(classification['label'])
+                if sector not in unique_sectors:
+                    unique_sectors.add(sector)
+                    top_5_unique_sectors.append({'sector': sector})
+                    if len(top_5_unique_sectors) == 5:
+                        break
+    
+            return top_5_unique_sectors
+
+
+
+ 
+    if st.button("Step 1: Make sure your resume aligns to your sector "):
+
+            if uploaded_file:
+                data = {"text" : text}
+                if len(text) > MAX_SEQUENCE_LENGTH:
+                    chunks = [text[i:i+MAX_SEQUENCE_LENGTH] for i in range(0, len(text), MAX_SEQUENCE_LENGTH)]
+                    responses = []
+                    for chunk in chunks:
+                        
+                        response = requests.post(API_URL, headers={"Authorization": f"Bearer {API_TOKEN}"}, json={"text": chunk})
+                        responses.append(response)
+
+                    top_5_classifications = extract_top_5(responses)  # Function to extract top 5 classifications
+                  
+                else:
+                   
+                    response = requests.post(API_URL, headers={"Authorization": f"Bearer {API_TOKEN}"}, json=data)
+                    top_5_classifications = extract_top_5(response) 
+
+
+                st.subheader(f"Top 5 Resume Classifications:")
+                for classification in top_5_classifications:
+                    st.markdown(f'<div style="background-color:#FAF0E6; font-size: 20px; font-weight: bold; color: #ff69b4; padding:10px; border-radius:5px;">{classification["sector"]}</div>', unsafe_allow_html=True)
+                    
+            else:
+                st.write("Please upload a resume first.")
+
 
 
     
-    if st.button("Generate Cover Letter"):
-         if job_desc and uploaded_file is not None:
-            prompt = f"Take this job description: {job_desc} and resume: {text} and write a cover letter tailored to it. Extract previous experience, skills, education, email, address from the resume and extract the company name and what they require from the job description"
-            messages = [{"role": "user", "content": prompt}]
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=messages,
-                temperature=0, 
+    if st.button("Step 2: Generate Cover Letter"):
+            if job_desc and uploaded_file is not None:
+                prompt = f"Create a personalized cover letter based on the provided job description: {job_desc} and resume: {text} . Incorporate relevant details such as previous experience, skills, education, contact information (email and address) from the resume. Extract the company name and the position requirements from the job description to craft a tailored cover letter that highlights the qualifications in the resume and aligns with the job role."
+
+                # prompt = f"Take this job description: {job_desc} and resume: {text} and write a cover letter tailored to it. Extract previous experience, skills, education, email, address from the resume and extract the company name and position from the job description."
+                messages = [{"role": "user", "content": prompt}]
+                response = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=messages,
+                    temperature=0, 
                 )
-            return response.choices[0].message.content
+                answer = response.choices[0].message.content
 
     response = get_completion(prompt)
     st.write(f"Generated Cover Letter: {response}")
