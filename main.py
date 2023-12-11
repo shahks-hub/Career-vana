@@ -66,7 +66,7 @@ st.title("Careers influenced by various factors over the years")
     
  
 
-elif tabs == 'Visualize Job Trends':
+if tabs == 'Visualize Job Trends':
     st.header("Job Trends, Target City: NYC")
     selected_factor = st.selectbox('Select a factor', ['gender', 'ethnicity', 'race'])
     if selected_factor == 'gender':
