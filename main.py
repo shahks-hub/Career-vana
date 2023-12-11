@@ -87,46 +87,60 @@ elif tabs == 'Geographic':
     st.header("Geographic Section")
 
     # Load data
-    df = pd.read_csv('data/mock_data.csv')
+    monster_jobs_df = pd.read_csv('data/monster_jobs.csv')
 
+    state_name_to_code = {
+        'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR',
+        'California': 'CA', 'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE',
+        'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID',
+        'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS',
+        'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
+        'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
+        'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV',
+        'New Hampshire': 'NH', 'New Jersey': 'NJ', 'New Mexico': 'NM', 'New York': 'NY',
+        'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK',
+        'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
+        'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT',
+        'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV',
+        'Wisconsin': 'WI', 'Wyoming': 'WY', 'District of Columbia': 'DC'
+    }
+
+    monster_jobs_df['state_code'] = monster_jobs_df['cleaned_states'].map(state_name_to_code)
+
+    df_sector = monster_jobs_df[['state_code', 'sector']]
+    unique_sectors = df_sector['sector'].unique()
+    colors = px.colors.qualitative.Plotly
+    color_discrete_map_sector = {sector: color for sector, color in zip(unique_sectors, colors)}
+
+    # Set up Streamlit dropdowns
+    state_dropdown_sector = st.selectbox('Select a State:', list(state_name_to_code.keys()), key='state')
+    sector_dropdown = st.selectbox('Select a Sector:', unique_sectors, key='sector')
+
+    
+
+      # Please dear god
+    def update_map_sector(selected_state, selected_sector):
+      
+
+        
+        filtered_df_sector = df_sector[(df_sector['state_code'] == selected_state) & (df_sector['sector'] == selected_sector)]
+
+        
+        fig_sector = px.choropleth(
+            filtered_df_sector,
+            locations='state_code',
+            locationmode="USA-states",
+            color='sector',
+            color_discrete_map=color_discrete_map_sector,
+            scope="usa"
+        )
+        fig_sector.update_layout(title_text=f'Sector: {selected_sector} by State in USA')
+
+        st.plotly_chart(fig_sector)
    
-    sectors = st.multiselect('Select Employment Sectors', df['employment_sector'].unique())
-    if not sectors:
-        filtered_df = df
-    else:
-        filtered_df = df[df['employment_sector'].isin(sectors)]
+    update_map_sector(state_name_to_code[state_dropdown_sector], sector_dropdown)
 
-    
-    state_counts = filtered_df['state'].value_counts().reset_index()
-    state_counts.columns = ['state', 'count']
-    state_avg_salary = filtered_df.groupby('state')['salary'].mean().reset_index()
-
-
-    map_color = st.selectbox('Select Map Color', ['Viridis', 'Cividis', 'Plasma', 'Inferno'])
-
-    
-    map_option = st.selectbox('Select what to display on the map', ['Number of Entries', 'Average Salary'])
-
-    
-    if map_option == 'Number of Entries':
-        fig = px.choropleth(state_counts, 
-                        locations='state', 
-                        color='count',  
-                        color_continuous_scale=map_color,
-                        scope="usa",
-                        title='Number of Entries per State')
-        st.plotly_chart(fig)
-    elif map_option == 'Average Salary':
-        fig = px.choropleth(state_avg_salary, 
-                        locations='state',  
-                        locationmode="USA-states", 
-                        color='salary',  
-                        color_continuous_scale=map_color,
-                        scope="usa",
-                        title='Average Salary per State')
-        st.plotly_chart(fig)
-
-
+        
 
     
 
@@ -170,7 +184,24 @@ elif tabs == 'Find Your Perfect Career Sector':
     filename2 = 'pickled_models/finalized_vector.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
     loaded_vector = pickle.load(open(filename2,'rb'))
-   
+
+    state_name_to_code = {
+        'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR',
+        'California': 'CA', 'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE',
+        'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID',
+        'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS',
+        'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
+        'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
+        'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV',
+        'New Hampshire': 'NH', 'New Jersey': 'NJ', 'New Mexico': 'NM', 'New York': 'NY',
+        'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK',
+        'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
+        'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT',
+        'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV',
+        'Wisconsin': 'WI', 'Wyoming': 'WY', 'District of Columbia': 'DC'
+    }
+
+    monster_df['state_code'] = monster_df['cleaned_states'].map(state_name_to_code)
 
     # Define functions for text preprocessing
     def make_lower(a_string):
@@ -202,7 +233,7 @@ elif tabs == 'Find Your Perfect Career Sector':
         proba = predictions_proba[0]
         combined = list(zip(classes, proba))
         sorted_combined = sorted(combined, key=lambda x: x[1], reverse=True)
-        top_predictions = sorted_combined[:3]
+        top_predictions = sorted_combined[:2]
         for i, (predicted_class, probability) in enumerate(top_predictions, start=1):
             st.write(f"Prediction {i}: Career path '{predicted_class}'")
 
@@ -212,19 +243,44 @@ elif tabs == 'Find Your Perfect Career Sector':
             # Filter dataset by predicted sectors
         selected_sectors = [pred[0] for pred in top_predictions]
         filtered_df = monster_df[monster_df['sector'].isin(selected_sectors)]
+         # Display dropdown for selecting sectors
+        selected_sector = top_predictions[0][0]
+
+        st.subheader(f"Heatmap for '{selected_sector}' Jobs by State")
+
+        sector_df = filtered_df[filtered_df['sector'] == selected_sector]
+        states_count = sector_df['cleaned_states'].value_counts()
+
+
+        fig_heatmap = px.choropleth(
+            sector_df,
+            locations='state_code',
+            locationmode="USA-states",
+            color='cleaned_states',
+            scope="usa",
+            title=f"Heatmap for '{selected_sector}' Jobs by State"
+        )
+
+        fig_heatmap.update_layout(
+            title_text=f"Heatmap for '{selected_sector}' Jobs by State",
+            geo=dict(
+                lakecolor='LightBlue',
+                landcolor='LightGreen',
+            ),
+         )
+
+        st.plotly_chart(fig_heatmap)
 
         
-        ###MAKE PIE CHARTS FOR PREDICTED SECTORS - henry you can try to use this logic to make maps instead
+       ###MAKE PIE CHARTS FOR PREDICTED SECTORS - henry you can try to use this logic to make maps instead
         st.subheader("Top States in Predicted Sectors")
         for sector in selected_sectors:
             sector_df = filtered_df[filtered_df['sector'] == sector]
             states_count = sector_df['cleaned_states'].value_counts().head(10)
         
-        ###pie charts plotting here
+       
             fig_pie = px.pie(values=states_count.values, names=states_count.index, title=f"Top 10 States in '{sector}'")
             st.plotly_chart(fig_pie)
-        
-    
 
 
      # Display top 10 job titles in each predicted sector
@@ -234,6 +290,8 @@ elif tabs == 'Find Your Perfect Career Sector':
             st.write(f"Top 10 Job Titles in '{sector}':")
             st.write(top_jobs)
     
+
+
 
 elif tabs == 'Generate Cover Letter':
     API_URL = "https://api-inference.huggingface.co/models/Sachinkelenjaguri/resume_classifier"
@@ -408,3 +466,21 @@ elif tabs == 'Generate Cover Letter':
 
 
     
+
+
+     # # Dark transparent background for astheics
+        # background_color = "#0E1117"  
+        # fig_sector.update_layout(
+        #     paper_bgcolor=background_color,
+        #     plot_bgcolor=background_color,
+        #     geo=dict(
+        #         bgcolor=background_color,
+        #         lakecolor='LightBlue',  
+        #         landcolor='LightGreen',  
+        #     ),
+        #     font=dict(
+        #         family="Arial, sans-serif",
+        #         size=12,
+        #         color="#FFFFFF"  
+        #     )
+        # )
