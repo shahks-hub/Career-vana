@@ -373,5 +373,38 @@ elif tabs == 'Generate Cover Letter':
                 )
                 answer = response.choices[0].message.content
 
-    response = get_completion(prompt)
-    st.write(f"Generated Cover Letter: {response}")
+
+                css_styles = """
+                <style>
+                    .cover-letter {
+                        font-family: Arial, sans-serif;
+                        font-size: 12pt;
+                        line-height: 1.6;
+                        margin-bottom: 20px;
+                        padding: 20px;
+                        border: 1px solid #ccc;
+                        border-radius: 5px;
+                        background-color: #f9f9f9;
+                        color: #333;
+                    }
+                    .cover-letter h1 {
+                        font-size: 18pt;
+                        margin-bottom: 20px;
+                    }
+                 </style>
+                """
+
+                st.markdown(css_styles, unsafe_allow_html=True)
+                st.subheader("Your Tailored Cover Letter")
+                st.markdown(f'<div class="cover-letter">{answer}</div>', unsafe_allow_html=True)
+
+
+                if st.button("Download as PDF"):
+                    pdf_content = answer
+                    pdf_filename = "cover_letter.pdf"
+                    b64 = base64.b64encode(pdf_content.encode()).decode()
+                    href = f'<a href="data:application/pdf;base64,{b64}" download="{pdf_filename}">Download Cover Letter as PDF</a>'
+                    st.markdown(href, unsafe_allow_html=True)
+
+
+    
