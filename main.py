@@ -16,57 +16,14 @@ _ = load_dotenv(find_dotenv())
 
 
 
-data_visualize_K = pd.read_csv('data/LocalPayNYC.csv')
-
-
 tabs = st.sidebar.radio("Select a tab", ( 'Find Your Perfect Career Sector', 'Generate Cover Letter', 'Visualize Job Trends'))
 
 # Main content
 st.title("Careers influenced by various factors over the years")
 
-# # Psychographic tab
-# if tabs == 'Visualize Job Trends':
-    
-    
-#     # Create a list of available factors (columns) in the CSV file
-#     available_factors = data_visualize_K.columns.tolist()
-
-#     # Let the user choose factors (columns) from the CSV file
-#     col1, col2, col3 = st.columns(3)  # Create two columns for side-by-side display
-
-#     with col1:
-#         selected_factor1 = st.selectbox('This factor appears on X-Axis', available_factors, key='factor1')
-#         unique_values_factor1 = data_visualize_K[selected_factor1].unique()
-#         st.write(f"Unique values in the selected {selected_factor1} column:", unique_values_factor1)
-
-#     with col2:
-#         selected_factor2 = st.selectbox('This factor appears on Y-Axis', available_factors, key='factor2')
-#         unique_values_factor2 = data_visualize_K[selected_factor2].unique()
-#         st.write(f"Unique values in the selected {selected_factor2} column:", unique_values_factor2)
-        
-#     with col3:
-#         selected_factor3 = st.selectbox('This factor provides color', available_factors, key='factor3')
-#         unique_values_factor3 = data_visualize_K[selected_factor3].unique()
-#         st.write(f"Unique values in the selected {selected_factor3} column:", unique_values_factor3)
-
-#     # Display box plots
-#     st.subheader("Box Plots")
-#     fig_box = px.box(data_visualize_K, x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"{selected_factor1} {selected_factor2}")
-#     st.plotly_chart(fig_box)
-
-#     # Display histogram
-#     st.subheader("Bar Chart")
-#     fig_bar = px.histogram(data_visualize_K,x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"Employment by {selected_factor1}", barmode='group')   
-#     st.plotly_chart(fig_bar)
-    
-#     # Display line graph
-#     st.subheader("Line Graph")
-#     fig_line = px.line(data_visualize_K, x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"{selected_factor1} {selected_factor2}")
-#     st.plotly_chart(fig_line)
-    
- 
 
 if tabs == 'Visualize Job Trends':
+    data_visualize_K = pd.read_csv('data/LocalPayNYC.csv')
     st.header("Job Trends, Target City: NYC")
     selected_factor = st.selectbox('Select a factor', ['gender', 'ethnicity', 'race'])
     if selected_factor == 'gender':
@@ -81,22 +38,17 @@ if tabs == 'Visualize Job Trends':
         description_bar = "some notable observations would be white working more in skilled craft than other races, asians and black winning the technicians profession, asians and white significantly more administrators/officials than paraprofessionals. "
 
 
-    # Display box plot and pie chart
-    st.subheader("Box Plot")
-    fig_box = px.box(data_visualize_K, x=selected_factor, y="upper_pay_band_bound", title=f"Pay Distribution by {selected_factor}")
-    st.write(description_box)
-    st.plotly_chart(fig_box)
-
-    st.subheader("Bar Plot")
+  
+    st.subheader("The Bar is high Plot")
     fig_bar = px.bar(data_visualize_K, x=selected_factor,color="job_category", barmode ="group",title=f"Distribution of Job Categories by {selected_factor}")
     st.write(description_bar)
     st.plotly_chart(fig_bar)
 
-    # Display histogram
-    st.subheader("Bar Chart")
-    fig_bar = px.histogram(data_visualize_K,x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"Employment by {selected_factor1}", barmode='group')   
-    st.plotly_chart(fig_bar)
-   
+     # Display box plot and pie chart
+    st.subheader("Don't fit in the Box Plot")
+    fig_box = px.box(data_visualize_K, x=selected_factor, y="upper_pay_band_bound", title=f"Pay Distribution by {selected_factor}")
+    st.write(description_box)
+    st.plotly_chart(fig_box)
 
 
 
@@ -164,7 +116,7 @@ elif tabs == 'Find Your Perfect Career Sector':
 
 
 
-         ####VISUALIZATIONS START HERE
+        
             # Filter dataset by predicted sectors
         selected_sectors = [pred[0] for pred in top_predictions]
         filtered_df = monster_df[monster_df['sector'].isin(selected_sectors)]
@@ -197,7 +149,7 @@ elif tabs == 'Find Your Perfect Career Sector':
         st.plotly_chart(fig_heatmap)
 
         
-       ###MAKE PIE CHARTS FOR PREDICTED SECTORS - henry you can try to use this logic to make maps instead
+       ###MAKE PIE CHARTS FOR PREDICTED SECTORS 
         st.subheader("Top States in Predicted Sectors")
         for sector in selected_sectors:
             sector_df = filtered_df[filtered_df['sector'] == sector]
@@ -335,7 +287,8 @@ elif tabs == 'Generate Cover Letter':
 
                 st.subheader(f"Top 5 Resume Classifications:")
                 for classification in top_5_classifications:
-                    st.markdown(f'<div style="background-color:#FAF0E6; font-size: 20px; font-weight: bold; color: #ff69b4; padding:10px; border-radius:5px;">{classification["sector"]}</div>', unsafe_allow_html=True)
+                    st.write(f"Predicted sectors: {classification['sector']} ")
+                   
                     
             else:
                 st.write("Please upload a resume first.")
@@ -346,8 +299,6 @@ elif tabs == 'Generate Cover Letter':
     if st.button("Step 2: Generate Cover Letter"):
             if job_desc and uploaded_file is not None:
                 prompt = f"Create a personalized cover letter based on the provided job description: {job_desc} and resume: {text} . Incorporate relevant details such as previous experience, skills, education, contact information (email and address) from the resume. Extract the company name and the position requirements from the job description to craft a tailored cover letter that highlights the qualifications in the resume and aligns with the job role."
-
-                # prompt = f"Take this job description: {job_desc} and resume: {text} and write a cover letter tailored to it. Extract previous experience, skills, education, email, address from the resume and extract the company name and position from the job description."
                 messages = [{"role": "user", "content": prompt}]
                 response = client.chat.completions.create(
                     model="gpt-3.5-turbo",
@@ -382,31 +333,5 @@ elif tabs == 'Generate Cover Letter':
                 st.markdown(f'<div class="cover-letter">{answer}</div>', unsafe_allow_html=True)
 
 
-                if st.button("Download as PDF"):
-                    pdf_content = answer
-                    pdf_filename = "cover_letter.pdf"
-                    b64 = base64.b64encode(pdf_content.encode()).decode()
-                    href = f'<a href="data:application/pdf;base64,{b64}" download="{pdf_filename}">Download Cover Letter as PDF</a>'
-                    st.markdown(href, unsafe_allow_html=True)
 
 
-   
-
-
-
-     # # Dark transparent background for astheics
-        # background_color = "#0E1117"  
-        # fig_sector.update_layout(
-        #     paper_bgcolor=background_color,
-        #     plot_bgcolor=background_color,
-        #     geo=dict(
-        #         bgcolor=background_color,
-        #         lakecolor='LightBlue',  
-        #         landcolor='LightGreen',  
-        #     ),
-        #     font=dict(
-        #         family="Arial, sans-serif",
-        #         size=12,
-        #         color="#FFFFFF"  
-        #     )
-        # )
