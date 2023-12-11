@@ -16,134 +16,58 @@ _ = load_dotenv(find_dotenv())
 
 
 
-
 data_visualize_K = pd.read_csv('data/LocalPayNYC.csv')
-data_visualize_B = pd.read_csv('data/b_dataMod.csv')
 
-tabs = st.sidebar.radio("Select a tab", ('Geographic', 'Psychographic', 'Demographic', 'Find Your Perfect Career Sector', 'Generate Cover Letter'))
+
+tabs = st.sidebar.radio("Select a tab", ( 'Find Your Perfect Career Sector', 'Generate Cover Letter', 'Visualize Job Trends'))
 
 # Main content
 st.title("Careers influenced by various factors over the years")
 
-# Psychographic tab
-if tabs == 'Psychographic':
-    st.header("Psychographic Section")
+# # Psychographic tab
+# if tabs == 'Visualize Job Trends':
     
-    # Create a list of available factors (columns) in the CSV file
-    available_factors = data_visualize_K.columns.tolist()
+    
+#     # Create a list of available factors (columns) in the CSV file
+#     available_factors = data_visualize_K.columns.tolist()
 
-    # Let the user choose factors (columns) from the CSV file
-    col1, col2, col3 = st.columns(3)  # Create two columns for side-by-side display
+#     # Let the user choose factors (columns) from the CSV file
+#     col1, col2, col3 = st.columns(3)  # Create two columns for side-by-side display
 
-    with col1:
-        selected_factor1 = st.selectbox('This factor appears on X-Axis', available_factors, key='factor1')
-        unique_values_factor1 = data_visualize_K[selected_factor1].unique()
-        st.write(f"Unique values in the selected {selected_factor1} column:", unique_values_factor1)
+#     with col1:
+#         selected_factor1 = st.selectbox('This factor appears on X-Axis', available_factors, key='factor1')
+#         unique_values_factor1 = data_visualize_K[selected_factor1].unique()
+#         st.write(f"Unique values in the selected {selected_factor1} column:", unique_values_factor1)
 
-    with col2:
-        selected_factor2 = st.selectbox('This factor appears on Y-Axis', available_factors, key='factor2')
-        unique_values_factor2 = data_visualize_K[selected_factor2].unique()
-        st.write(f"Unique values in the selected {selected_factor2} column:", unique_values_factor2)
+#     with col2:
+#         selected_factor2 = st.selectbox('This factor appears on Y-Axis', available_factors, key='factor2')
+#         unique_values_factor2 = data_visualize_K[selected_factor2].unique()
+#         st.write(f"Unique values in the selected {selected_factor2} column:", unique_values_factor2)
         
-    with col3:
-        selected_factor3 = st.selectbox('This factor provides color', available_factors, key='factor3')
-        unique_values_factor3 = data_visualize_K[selected_factor3].unique()
-        st.write(f"Unique values in the selected {selected_factor3} column:", unique_values_factor3)
+#     with col3:
+#         selected_factor3 = st.selectbox('This factor provides color', available_factors, key='factor3')
+#         unique_values_factor3 = data_visualize_K[selected_factor3].unique()
+#         st.write(f"Unique values in the selected {selected_factor3} column:", unique_values_factor3)
 
-    # Display box plots
-    st.subheader("Box Plots")
-    fig_box = px.box(data_visualize_K, x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"{selected_factor1} {selected_factor2}")
-    st.plotly_chart(fig_box)
+#     # Display box plots
+#     st.subheader("Box Plots")
+#     fig_box = px.box(data_visualize_K, x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"{selected_factor1} {selected_factor2}")
+#     st.plotly_chart(fig_box)
 
-    # Display histogram
-    st.subheader("Bar Chart")
-    fig_bar = px.histogram(data_visualize_K,x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"Employment by {selected_factor1}", barmode='group')   
-    st.plotly_chart(fig_bar)
+#     # Display histogram
+#     st.subheader("Bar Chart")
+#     fig_bar = px.histogram(data_visualize_K,x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"Employment by {selected_factor1}", barmode='group')   
+#     st.plotly_chart(fig_bar)
     
-    # Display line graph
-    st.subheader("Line Graph")
-    fig_line = px.line(data_visualize_K, x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"{selected_factor1} {selected_factor2}")
-    st.plotly_chart(fig_line)
+#     # Display line graph
+#     st.subheader("Line Graph")
+#     fig_line = px.line(data_visualize_K, x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"{selected_factor1} {selected_factor2}")
+#     st.plotly_chart(fig_line)
     
-    # Display Scatter 3D graph
-    st.subheader("Line 3D Chart")
-    fig_line_3d = px.line_3d(data_visualize_K, x=selected_factor1, y=selected_factor2, z=selected_factor3, title=f"{selected_factor1} vs {selected_factor2} vs {selected_factor3}")
-    fig_line_3d.update_layout(height=800, width=1000)
-    st.plotly_chart(fig_line_3d)
-    
-    # Display Scatter 3D graph
-    st.subheader("Scatter 3D Plot")
-    fig_scatter_3d = px.scatter_3d(data_visualize_K, x=selected_factor1, y=selected_factor2, z=selected_factor3, title=f"{selected_factor1} vs {selected_factor2} vs {selected_factor3}")
-    fig_scatter_3d.update_layout(height=800, width=1000)
-    st.plotly_chart(fig_scatter_3d)
+ 
 
-
-
-
-elif tabs == 'Geographic':
-    st.header("Geographic Section")
-
-    # Load data
-    monster_jobs_df = pd.read_csv('data/monster_jobs.csv')
-
-    state_name_to_code = {
-        'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR',
-        'California': 'CA', 'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE',
-        'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID',
-        'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS',
-        'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
-        'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
-        'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV',
-        'New Hampshire': 'NH', 'New Jersey': 'NJ', 'New Mexico': 'NM', 'New York': 'NY',
-        'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK',
-        'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
-        'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT',
-        'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV',
-        'Wisconsin': 'WI', 'Wyoming': 'WY', 'District of Columbia': 'DC'
-    }
-
-    monster_jobs_df['state_code'] = monster_jobs_df['cleaned_states'].map(state_name_to_code)
-
-    df_sector = monster_jobs_df[['state_code', 'sector']]
-    unique_sectors = df_sector['sector'].unique()
-    colors = px.colors.qualitative.Plotly
-    color_discrete_map_sector = {sector: color for sector, color in zip(unique_sectors, colors)}
-
-    # Set up Streamlit dropdowns
-    state_dropdown_sector = st.selectbox('Select a State:', list(state_name_to_code.keys()), key='state')
-    sector_dropdown = st.selectbox('Select a Sector:', unique_sectors, key='sector')
-
-    
-
-      # Please dear god
-    def update_map_sector(selected_state, selected_sector):
-      
-
-        
-        filtered_df_sector = df_sector[(df_sector['state_code'] == selected_state) & (df_sector['sector'] == selected_sector)]
-
-        
-        fig_sector = px.choropleth(
-            filtered_df_sector,
-            locations='state_code',
-            locationmode="USA-states",
-            color='sector',
-            color_discrete_map=color_discrete_map_sector,
-            scope="usa"
-        )
-        fig_sector.update_layout(title_text=f'Sector: {selected_sector} by State in USA')
-
-        st.plotly_chart(fig_sector)
-   
-    update_map_sector(state_name_to_code[state_dropdown_sector], sector_dropdown)
-
-        
-
-    
-
-# Demographic tab
-elif tabs == 'Demographic':
-    st.header("Demographic Section")
+if tabs == 'Visualize Job Trends':
+    st.header("Job Trends, Target City: NYC")
     selected_factor = st.selectbox('Select a factor', ['gender', 'ethnicity', 'race'])
     if selected_factor == 'gender':
         data_visualize_K.loc[~data_visualize_K['gender'].isin(['Male', 'Female']), 'gender'] = 'Other gender'
@@ -157,8 +81,6 @@ elif tabs == 'Demographic':
         description_bar = "some notable observations would be white working more in skilled craft than other races, asians and black winning the technicians profession, asians and white significantly more administrators/officials than paraprofessionals. "
 
 
-        
-
     # Display box plot and pie chart
     st.subheader("Box Plot")
     fig_box = px.box(data_visualize_K, x=selected_factor, y="upper_pay_band_bound", title=f"Pay Distribution by {selected_factor}")
@@ -169,6 +91,12 @@ elif tabs == 'Demographic':
     fig_bar = px.bar(data_visualize_K, x=selected_factor,color="job_category", barmode ="group",title=f"Distribution of Job Categories by {selected_factor}")
     st.write(description_bar)
     st.plotly_chart(fig_bar)
+
+    # Display histogram
+    st.subheader("Bar Chart")
+    fig_bar = px.histogram(data_visualize_K,x=selected_factor1, y=selected_factor2, color=selected_factor3, title=f"Employment by {selected_factor1}", barmode='group')   
+    st.plotly_chart(fig_bar)
+   
 
 
 
@@ -462,7 +390,8 @@ elif tabs == 'Generate Cover Letter':
                     st.markdown(href, unsafe_allow_html=True)
 
 
-    
+   
+
 
 
      # # Dark transparent background for astheics
