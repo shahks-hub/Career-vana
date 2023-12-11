@@ -116,7 +116,7 @@ elif tabs == 'Find Your Perfect Career Sector':
 
 
 
-         ####VISUALIZATIONS START HERE
+        
             # Filter dataset by predicted sectors
         selected_sectors = [pred[0] for pred in top_predictions]
         filtered_df = monster_df[monster_df['sector'].isin(selected_sectors)]
@@ -149,7 +149,7 @@ elif tabs == 'Find Your Perfect Career Sector':
         st.plotly_chart(fig_heatmap)
 
         
-       ###MAKE PIE CHARTS FOR PREDICTED SECTORS - henry you can try to use this logic to make maps instead
+       ###MAKE PIE CHARTS FOR PREDICTED SECTORS 
         st.subheader("Top States in Predicted Sectors")
         for sector in selected_sectors:
             sector_df = filtered_df[filtered_df['sector'] == sector]
@@ -287,7 +287,8 @@ elif tabs == 'Generate Cover Letter':
 
                 st.subheader(f"Top 5 Resume Classifications:")
                 for classification in top_5_classifications:
-                    st.markdown(f'<div style="background-color:#FAF0E6; font-size: 20px; font-weight: bold; color: #ff69b4; padding:10px; border-radius:5px;">{classification["sector"]}</div>', unsafe_allow_html=True)
+                    st.write(f"Predicted sectors: {classification['sector']} ")
+                   
                     
             else:
                 st.write("Please upload a resume first.")
@@ -298,8 +299,6 @@ elif tabs == 'Generate Cover Letter':
     if st.button("Step 2: Generate Cover Letter"):
             if job_desc and uploaded_file is not None:
                 prompt = f"Create a personalized cover letter based on the provided job description: {job_desc} and resume: {text} . Incorporate relevant details such as previous experience, skills, education, contact information (email and address) from the resume. Extract the company name and the position requirements from the job description to craft a tailored cover letter that highlights the qualifications in the resume and aligns with the job role."
-
-                # prompt = f"Take this job description: {job_desc} and resume: {text} and write a cover letter tailored to it. Extract previous experience, skills, education, email, address from the resume and extract the company name and position from the job description."
                 messages = [{"role": "user", "content": prompt}]
                 response = client.chat.completions.create(
                     model="gpt-3.5-turbo",
