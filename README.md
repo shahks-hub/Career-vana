@@ -79,22 +79,22 @@ Embark on this educational adventure with our app, where every step is a burst o
 <h2 id="getting-started"> :book: Getting Started</h2>
 
 <p>Create an Environment:</p>
-<pre><code>$ python3 -m venv myenv</code></pre>
+<pre><code>python3 -m venv myenv</code></pre>
 
 <p>Activate the Environment:</p>
-<pre><code>$ source myenv/bin/activate</code></pre>
+<pre><code>source myenv/bin/activate</code></pre>
 
 <p>Deactivate Environments:</p>
-<pre><code>$ deactivate</code></pre>
+<pre><code>deactivate</code></pre>
 
 <p>Install All Dependencies:</p>
-<pre><code>$ pip install -r requirements.txt</code></pre>
+<pre><code>pip install -r requirements.txt</code></pre>
 
 <p>Run the App:</p>
-<pre><code>$ streamlit run main.py</code></pre>
+<pre><code>streamlit run main.py</code></pre>
 
 <p>Add Packages to Requirements.txt File:</p>
-<pre><code>$ pip freeze > requirements.txt</code></pre>
+<pre><code>pip freeze > requirements.txt</code></pre>
 
 <i>Note that all of the commands that appear in this project also appear in <code>commands.txt</code>, for easy copying and pasting.</i>
 
