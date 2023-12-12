@@ -10,8 +10,6 @@ import os
 from openai import OpenAI
 from PyPDF2 import PdfReader 
 import requests
-import base64
-import pyperclip
 from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())
 
