@@ -125,7 +125,7 @@ Embark on this educational adventure with our app, where every step is a burst o
 <ul>
   <li><b><a href="https://plotly.com/python/plotly-express/">Plotly</b> - A great reference point for several types of visual models</li>
   <li><b><a href="https://chat.openai.com/">ChatGPT</b> - Every time we got stuck on a bit of code, ChatGPT was there to help us out.</li>
-  <li><b><a href="https://docs.streamlit.io/library/advanced-features/theming">Streamlit Themeing</b> - Valuable for helping to adjust the theme of your streamlit app</li>
+  <li><b><a href="https://docs.streamlit.io/library/advanced-features/theming">Streamlit Theming</b> - Valuable for helping to adjust the theme of your streamlit app</li>
   <li><b><a href="https://www.kaggle.com/">Kaggle</b> - Where we went to find the datasets for our visuals and to train our models.</li>
 </ul>
 
@@ -137,7 +137,7 @@ Embark on this educational adventure with our app, where every step is a burst o
 ### This is the team that brought you this project, in all their glory:
 
 <ul>
-  <li><b><a href="https://brendancostello.github.io/portfolio/">Brendan Costello</a></b> - Wrote the README.md (Hello!) and provided a generally enjoyable experience for all involved</li>
+  <li><b><a href="https://brendancostello.github.io/portfolio/">Brendan Costello</a></b> - Wrote README (Hello!) and provided a generally enjoyable experience for all involved</li>
   <li><b><a href="https://www.linkedin.com/in/henry-d-5665071ba/">Henry Joseph Dugue</a></b> - Geographic expert extraordinaire and the best friend you never new you needed</li>
 <li><b><a href="https://www.linkedin.com/in/kasaf-shah/">Kasaf Shah</a></b> - The genius herself! Wrote the model while leaving everyone in her orbit just a little bit smarter</li>
 
