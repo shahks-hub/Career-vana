@@ -8,13 +8,16 @@
     <li><a href="#overview"> Overview</a></li>
     <li><a href="#getting-started"> Getting Started</a></li>
     <li><a href="#setup"> What We Used</a></li>
+    <li><a href="#team"> Who We Are</a></li>
   </ol>
 </details>
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
 <!-- ABOUT THE PROJECT -->
-<h2 id="about-the-project"> :pencil: Career-vana's Lofty Aspirations</h2>
+<h2 id="about-the-project"> :pencil: About the Project</h2>
+
+## Career-vana's Lofty Aspirations
 
 <p align="justify"> 
 Unlock the full potential of your tech prowess with our revolutionary application! Navigating the diverse landscape of the tech sector can be daunting, but fear not—our app is your key to decoding the perfect career path. Seamlessly translating your skills into a spectrum of lucrative roles, we empower you to discover the most coveted positions aligned with your expertise.
@@ -78,6 +81,8 @@ Embark on this educational adventure with our app, where every step is a burst o
 <!-- GETTING STARTED -->
 <h2 id="getting-started"> :book: Getting Started</h2>
 
+## We want to make it easy for you to work on bettering our app...here's how to begin!
+
 <p>Create an Environment:</p>
 <pre><code>python3 -m venv myenv</code></pre>
 
@@ -100,8 +105,10 @@ Embark on this educational adventure with our app, where every step is a burst o
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
-<!-- SETUP -->
+<!-- What We Used -->
 <h2 id="setup"> :floppy_disk: What We Used</h2>
+
+## These are the different tools we used and where you can find them for use on your own project:
 
 <ul>
   <li><b><a href="https://huggingface.co/">Hugging Face</a></b> - Provided the model for our Cover Letter Generator</li>
@@ -113,12 +120,25 @@ Embark on this educational adventure with our app, where every step is a burst o
   <li><b><a href="https://openai.com/">OpenAI</b> - </li>
 </ul>
 
-<h3>Some of our most valuable references</h3>
+## Along the way, we relied heavily on a diverse set of resources...and here they are:
+
 <ul>
   <li><b><a href="https://plotly.com/python/plotly-express/">Plotly</b> - A great reference point for several types of visual models</li>
   <li><b><a href="https://chat.openai.com/">ChatGPT</b> - Every time we got stuck on a bit of code, ChatGPT was there to help us out.</li>
   <li><b><a href="https://docs.streamlit.io/library/advanced-features/theming">Streamlit Themeing</b> - Valuable for helping to adjust the theme of your streamlit app</li>
   <li><b><a href="https://www.kaggle.com/">Kaggle</b> - Where we went to find the datasets for our visuals and to train our models.</li>
 </ul>
+
+![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+
+<!-- SETUP -->
+<h2 id="setup"> :smiley_face: Who We Are</h2>
+
+## This the team that brought you this project, in all their glory:
+
+<ul>
+  <li><b><a href="https://brendancostello.github.io/portfolio/">Brendan Costello</a></b> - Wrote the README.md (Hello!) and provided a generally enjoyable experience for all involved</li>
+  <li><b><a href="https://brendancostello.github.io/portfolio/">Henry Joseph Dugue</a></b> - Geographic expert extraordinaire and the best friend you never new you needed</li>
+<li><b><a href="https://brendancostello.github.io/portfolio/">Kasaf Shah</a></b> - The genius herself! Wrote the model while leaving everyone in her orbit just a little bit smarter</li>
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)

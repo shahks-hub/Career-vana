@@ -107,7 +107,9 @@ if tabs == 'Find Your Perfect Career Sector':
             locationmode="USA-states",
             color='cleaned_states',
             scope="usa",
-            title=f"Heatmap for '{selected_sector}' Jobs by State"
+            title=f"Heatmap for '{selected_sector}' Jobs by State",
+            color_continuous_scale='reds',  # You can adjust the color scale as needed
+            color_continuous_midpoint=max(states_count) / 2,  # Adjust midpoint based on your data
         )
 
         fig_heatmap.update_layout(
