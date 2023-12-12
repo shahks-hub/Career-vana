@@ -16,44 +16,16 @@ _ = load_dotenv(find_dotenv())
 
 
 
-tabs = st.sidebar.radio("Select a tab", ( 'Find Your Perfect Career Sector', 'Generate Cover Letter', 'Visualize Job Trends'))
+tabs = st.sidebar.radio("Select a tab", ( 'Find Your Perfect Career Sector', 'Generate Cover Letter'))
 
 # Main content
 st.title("Careers influenced by various factors over the years")
 
 
-if tabs == 'Visualize Job Trends':
-    data_visualize_K = pd.read_csv('data/LocalPayNYC.csv')
-    st.header("Job Trends, Target City: NYC")
-    selected_factor = st.selectbox('Select a factor', ['gender', 'ethnicity', 'race'])
-    if selected_factor == 'gender':
-        data_visualize_K.loc[~data_visualize_K['gender'].isin(['Male', 'Female']), 'gender'] = 'Other gender'
-        description_box = "Observations: People identifying as male tend to have the highest salaries followed by women and other genders."
-        description_bar = "Observations: Highest percentage of all genders are professionals which could also mean that there is just more data on professionals. Some noteworthy comparisons is that there are more men in skilled craft than female and other gender. women least common professions are skilled craft and service maintenance. men least common are technicians and protective service while other genders least common are administrative support, technicians and skilled craft  "
-    elif selected_factor == 'ethnicity':
-        description_box = "Non-hispanic or latino tend to be paid the highest. there may be data bias because of the people choosing not to report their ethnicity"
-        description_bar = "Ignoring the common professionals,Non-hispanic or latino populations tend to work as paraprofessionals and officials/administrators and least in protective service and skilled craft. while hispanic or latinos are generally the same the difference in paraprofessionals and officials in less which means either of those categories are more common, while in non-hispanic/latinos more tend to lean towards paraprofessionals than officials/administrators   "
-    elif selected_factor == 'race':
-        description_box = "highest paid race is White while lowest being native hawaian. again this could just correspond to their populations in the US. Moreover this the chart is only showing upper pay bound the average pay could be a different story."
-        description_bar = "some notable observations would be white working more in skilled craft than other races, asians and black winning the technicians profession, asians and white significantly more administrators/officials than paraprofessionals. "
-
-
-  
-    st.subheader("The Bar is high Plot")
-    fig_bar = px.bar(data_visualize_K, x=selected_factor,color="job_category", barmode ="group",title=f"Distribution of Job Categories by {selected_factor}")
-    st.write(description_bar)
-    st.plotly_chart(fig_bar)
-
-     # Display box plot and pie chart
-    st.subheader("Don't fit in the Box Plot")
-    fig_box = px.box(data_visualize_K, x=selected_factor, y="upper_pay_band_bound", title=f"Pay Distribution by {selected_factor}")
-    st.write(description_box)
-    st.plotly_chart(fig_box)
-
 
 
 # Find Your Perfect Career Sector tab
-elif tabs == 'Find Your Perfect Career Sector':
+if tabs == 'Find Your Perfect Career Sector':
     monster_df = pd.read_csv('data/monster_jobs.csv')
 
     # Load the model and initialize TfidfVectorizer
@@ -166,6 +138,14 @@ elif tabs == 'Find Your Perfect Career Sector':
             top_jobs = filtered_df[filtered_df['sector'] == sector]['job_title'].value_counts().head(10)
             st.write(f"Top 10 Job Titles in '{sector}':")
             st.write(top_jobs)
+
+
+        
+
+        
+
+
+
     
 
 
@@ -299,6 +279,7 @@ elif tabs == 'Generate Cover Letter':
     if st.button("Step 2: Generate Cover Letter"):
             if job_desc and uploaded_file is not None:
                 prompt = f"Create a personalized cover letter based on the provided job description: {job_desc} and resume: {text} . Incorporate relevant details such as previous experience, skills, education, contact information (email and address) from the resume. Extract the company name and the position requirements from the job description to craft a tailored cover letter that highlights the qualifications in the resume and aligns with the job role."
+
                 messages = [{"role": "user", "content": prompt}]
                 response = client.chat.completions.create(
                     model="gpt-3.5-turbo",
@@ -327,10 +308,45 @@ elif tabs == 'Generate Cover Letter':
                     }
                  </style>
                 """
-
+                
                 st.markdown(css_styles, unsafe_allow_html=True)
                 st.subheader("Your Tailored Cover Letter")
+                st.download_button('Download cover letter', answer)
                 st.markdown(f'<div class="cover-letter">{answer}</div>', unsafe_allow_html=True)
+                    
+   
+    if st.checkbox("Visualize Job Trends"):
+                
+                data_visualize_K = pd.read_csv('data/LocalPayNYC.csv')
+                st.header("Job Trends by demographics, Target City: NYC")
+            
+                selected_factor = st.selectbox('Select a factor', ['gender', 'ethnicity', 'race'])
+                
+                if selected_factor == 'gender':
+                    data_visualize_K.loc[~data_visualize_K['gender'].isin(['Male', 'Female']), 'gender'] = 'Other gender'
+                    description_box = "Observations: People identifying as male tend to have the highest salaries followed by women and other genders."
+                    description_bar = "Observations: Highest percentage of all genders are professionals which could also mean that there is just more data on professionals. Some noteworthy comparisons is that there are more men in skilled craft than female and other gender. women least common professions are skilled craft and service maintenance. men least common are technicians and protective service while other genders least common are administrative support, technicians and skilled craft  "
+                elif selected_factor == 'ethnicity':
+                    description_box = "Non-hispanic or latino tend to be paid the highest. there may be data bias because of the people choosing not to report their ethnicity"
+                    description_bar = "Ignoring the common professionals,Non-hispanic or latino populations tend to work as paraprofessionals and officials/administrators and least in protective service and skilled craft. while hispanic or latinos are generally the same the difference in paraprofessionals and officials in less which means either of those categories are more common, while in non-hispanic/latinos more tend to lean towards paraprofessionals than officials/administrators   "
+                elif selected_factor == 'race':
+                    description_box = "highest paid race is White while lowest being native hawaian. again this could just correspond to their populations in the US. Moreover this the chart is only showing upper pay bound the average pay could be a different story."
+                    description_bar = "some notable observations would be white working more in skilled craft than other races, asians and black winning the technicians profession, asians and white significantly more administrators/officials than paraprofessionals. "
+
+
+                st.subheader("The Bar is high Plot")
+                fig_bar = px.bar(data_visualize_K, x=selected_factor,color="job_category", barmode ="group",title=f"Distribution of Job Categories by {selected_factor}")
+               
+                st.plotly_chart(fig_bar)
+                with st.expander("See explanation"):
+                    st.write(description_bar)
+
+                # Display box plot and pie chart
+                st.subheader("Don't fit in the Box Plot")
+                fig_box = px.box(data_visualize_K, x=selected_factor, y="upper_pay_band_bound", title=f"Pay Distribution by {selected_factor}")
+                st.plotly_chart(fig_box)
+                with st.expander("See explanation"):
+                    st.write(description_box)
 
 
 
