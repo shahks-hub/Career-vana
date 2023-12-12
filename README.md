@@ -28,10 +28,6 @@ But that's not all—we go above and beyond by transforming your resume into a p
 <!-- OVERVIEW -->
 <h2 id="overview"> :cloud: Overview</h2>
 
-# Tech Skills Explorer App
-
-## Overview
-
 Welcome to the Career-vana App, where your journey to crafting a custom cover letter begins! This <code>README.md</code> file provides an educational guide on how to use the app's vibrant features.
 
 ## Usage Guide
