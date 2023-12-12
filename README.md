@@ -14,7 +14,7 @@
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
 <!-- ABOUT THE PROJECT -->
-<h2 id="about-the-project"> :pencil: About The Project</h2>
+<h2 id="about-the-project"> :pencil: Career-vana's Lofty Aspirations</h2>
 
 <p align="justify"> 
 Unlock the full potential of your tech prowess with our revolutionary application! Navigating the diverse landscape of the tech sector can be daunting, but fear not—our app is your key to decoding the perfect career path. Seamlessly translating your skills into a spectrum of lucrative roles, we empower you to discover the most coveted positions aligned with your expertise.
