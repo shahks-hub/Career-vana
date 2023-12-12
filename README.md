@@ -38,18 +38,18 @@ Welcome to the Career-vana App, where your journey to crafting a custom cover le
 ### Step 1: Discover Your Tech Skills
 
 1. **Navigate to the Sector Selector Tab:**
-   - Click on the `Sector Selector` tab to enter the world of possibilities.
+   - Click on the `CareerProphet` tab to enter the world of possibilities.
 
 2. **Enter Your Tech Skills:**
-   - In the `Enter Your Tech Skills` text box, vividly describe the tech skills you have mastered or are eager to explore.
+   - In the `Enter Your Interests Here` text box, vividly describe the tech skills you have mastered or are eager to explore.
 
 3. **Witness the Magic Unfold:**
-   - As you enter your skills, the app will provide valuable insights and colorful information about your skill sets with relevant job postings that work with out `Cover Letter Generator`.
+   - As you enter your skills, the app will provide valuable insights and colorful information about your skill sets with relevant job postings that work with out `JobProphet`.
 
 ### Step 2: Craft Your Unique Cover Letter
 
 1. **Navigate to the Generate Cover Letter Tab:**
-   - Move to the `Generate Cover Letter` tab where creativity meets professionalism.
+   - Move to the `JobProphet` tab where creativity meets professionalism.
 
 2. **Select a Job Posting:**
    - Choose a job posting that resonates with your aspirations.
