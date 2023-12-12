@@ -92,7 +92,6 @@ if tabs == 'Find Your Perfect Career Sector':
             color='count',
             scope="usa",
             color_continuous_scale="Reds",
-            
             title=f"Heatmap for '{selected_sector}' Jobs by State"
         )
 
