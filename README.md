@@ -28,17 +28,54 @@ But that's not all—we go above and beyond by transforming your resume into a p
 <!-- OVERVIEW -->
 <h2 id="overview"> :cloud: Overview</h2>
 
-<p align="justify"> 
-  In order to use our app, one simply enters the tech skills they feel proficient with, or are simply interested in, into the <code>Enter Your Tech Skills</code> text box on the <code>Sector Selector</code> tab. This will output valuable information regarding the skill sets given, as well as some job postings for those skill sets
-</p>
+# Tech Skills Explorer App
 
-<p align="justify"> 
-  Next, simply take one of the provided postings and input it into the <code>Job Description</code> text box on the <code>Generate Cover Letter</code> tab along with a .pdf of their resume into the <code>Provide a .PDF of Your Resume</code> box.
-</p>
+## Overview
 
-<p align="justify"> 
-  Enjoy your custom Cover Letter, and feel free to use this for any outside job postings you may be interested in!
-</p>
+Welcome to the Career-vana App, where your journey to crafting a custom cover letter begins! This <code>README.md</code> file provides an educational guide on how to use the app's vibrant features.
+
+## Usage Guide
+
+### Step 1: Discover Your Tech Skills
+
+1. **Navigate to the Sector Selector Tab:**
+   - Click on the `Sector Selector` tab to enter the world of possibilities.
+
+2. **Enter Your Tech Skills:**
+   - In the `Enter Your Tech Skills` text box, vividly describe the tech skills you master or are eager to explore.
+
+3. **Witness the Magic Unfold:**
+   - As you enter your skills, the app will provide valuable insights and colorful information about your skill sets and relevant job postings.
+
+### Step 2: Craft Your Unique Cover Letter
+
+1. **Navigate to the Generate Cover Letter Tab:**
+   - Move to the `Generate Cover Letter` tab where creativity meets professionalism.
+
+2. **Select a Job Posting:**
+   - Choose a job posting that resonates with your aspirations.
+
+3. **Enter Job Description:**
+   - In the `Job Description` text box, transcribe the chosen job posting, and watch the app weave its magic.
+
+4. **Upload Your Resume:**
+   - In the `Provide a .PDF of Your Resume` box, upload a PDF of your resume – the key to unlocking new opportunities.
+
+### Step 3: Revel in Your Custom Cover Letter
+
+1. **Behold Your Masterpiece:**
+   - Click through the app to unveil your custom cover letter – a testament to your skills and aspirations.
+
+2. **Feel the Empowerment:**
+   - Your cover letter is a personalized creation, a manifestation of your unique journey and potential.
+
+3. **Ready for the World:**
+   - Use your custom cover letter confidently for any external job postings that pique your interest.
+
+## Happy Exploring!
+
+Embark on this educational adventure with our app, where every step is a burst of color, and every feature is a brushstroke in the canvas of your career.
+
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
