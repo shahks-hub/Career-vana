@@ -11,6 +11,7 @@ from openai import OpenAI
 from PyPDF2 import PdfReader 
 import requests
 import base64
+import pyperclip
 from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())
 
@@ -21,6 +22,8 @@ tabs = st.sidebar.radio("Select a tab", ( 'CareerProphet', 'JobProphet'))
 # Main content
 st.title(":blue[Predict], Explore, :violet[*Achieve!*] :sparkles:")
 st.subheader("*with* :rainbow[Career-vana]")
+with st.expander("How to Navigate our Website"):
+    st.write("Add your career interests in the CareerProphet tab, go to the job titles and pick one you're interested in, expand that one and copy your favorite job description. Then move on to the JobProphet tab and paste it in the job description input box!")
 
 ##Helper functions
 
@@ -77,7 +80,6 @@ monster_df = load_data('data/monster_jobs.csv')
 #showcasing common job titles and prevalent locations associated with those sectors.
 
 
-
 if tabs == 'CareerProphet':
    
 
@@ -120,9 +122,9 @@ if tabs == 'CareerProphet':
         proba = predictions_proba[0]
         combined = list(zip(classes, proba))
         sorted_combined = sorted(combined, key=lambda x: x[1], reverse=True)
-        top_predictions = sorted_combined[:2]
+        top_predictions = sorted_combined[:1]
         for i, (predicted_class, probability) in enumerate(top_predictions, start=1):
-            st.write(f":rainbow[*Prediction* {i}:] Career path :blue['{predicted_class}']")
+            st.write(f":rainbow[*Prediction* :] Career path :blue['{predicted_class}']")
 
         
          # Filter dataset by predicted sectors
@@ -132,7 +134,7 @@ if tabs == 'CareerProphet':
          # Display dropdown for selecting sectors
         selected_sector = top_predictions[0][0]
 
-        st.subheader("Top :red[States] in Predicted :red[Sectors]")
+        st.subheader("Top :red[States] in Predicted :red[Sector]")
        
         # make a new df for the map based on location counts for the predicted sector
         sector_df = filtered_df[filtered_df['sector'] == selected_sector]
@@ -166,21 +168,34 @@ if tabs == 'CareerProphet':
         
        ###MAKE PIE CHARTS FOR PREDICTED SECTORS 
        
-        for sector in selected_sectors:
-            sector_df = filtered_df[filtered_df['sector'] == sector]
-            states_count = sector_df['location_state'].value_counts().head(10)
-        
+      
+        sector_df = filtered_df[filtered_df['sector'] == selected_sector]
+        states_count = sector_df['location_state'].value_counts().head(10)
+        fig_pie = px.pie(values=states_count.values, names=states_count.index, title=f"Top 10 States in '{selected_sector}'")
+        st.plotly_chart(fig_pie)
+
+   
+                # Display top 10 job titles in each predicted sector
+        st.subheader("Top 10 :red[Job Titles] in Predicted :red[Sector]")
+           
+        top_jobs = filtered_df[filtered_df['sector'] == selected_sector]['job_title'].value_counts().head(10)
+        st.write(f"Top 10 Job Titles in '{selected_sector}':")
+
+        for job_title in top_jobs.index:
+                    # Fetch job descriptions for the selected sector and job title
+            job_descs = filtered_df[(filtered_df['sector'] == selected_sector) & (filtered_df['job_title'] == job_title)]['job_description'].values
+                    
+                    # Create an expandable section for each job title
+            with st.expander(f"{job_title} - {len(job_descs)} Descriptions"):
+                for idx, job_desc in enumerate(job_descs, start=1):
+                    desc_words = job_desc.split()[:50]
+                    truncated_desc = ' '.join(desc_words)
+                    st.write(f"Description {idx}: {truncated_desc}...")
+
        
-            fig_pie = px.pie(values=states_count.values, names=states_count.index, title=f"Top 10 States in '{sector}'")
-            st.plotly_chart(fig_pie)
 
-
-     # Display top 10 job titles in each predicted sector
-        st.subheader("Top 10 :red[Job Titles] in Predicted :red[Sectors]")
-        for sector in selected_sectors:
-            top_jobs = filtered_df[filtered_df['sector'] == sector]['job_title'].value_counts().head(10)
-            st.write(f"Top 10 Job Titles in '{sector}':")
-            st.write(top_jobs)
+                
+                        
 
 
         
