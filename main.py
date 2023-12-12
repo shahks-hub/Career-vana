@@ -16,15 +16,15 @@ _ = load_dotenv(find_dotenv())
 
 
 
-tabs = st.sidebar.radio("Select a tab", ( 'Find Your Perfect Career Sector', 'Generate Cover Letter'))
+tabs = st.sidebar.radio("Select a tab", ( 'CareerProphet', 'JobProphet'))
 
 # Main content
-st.title("Careers influenced by various factors over the years")
-
+st.title(":blue[Predict], Explore, :violet[*Achieve!*] :sparkles:")
+st.subheader("*with* :rainbow[Career-vana]")
 
 
 # Find Your Perfect Career Sector tab
-if tabs == 'Find Your Perfect Career Sector':
+if tabs == 'CareerProphet':
     monster_df = pd.read_csv('data/monster_jobs.csv')
 
     # Load the model and initialize TfidfVectorizer
@@ -50,12 +50,12 @@ if tabs == 'Find Your Perfect Career Sector':
         return input_string
 
     # Streamlit app section
-    st.title("Find Your Perfect Career Sector")
+    st.subheader("Find Your Perfect Career Sector 	:100:")
 
     # Text input area
-    user_input = st.text_area("Enter your text here:")
+    user_input = st.text_area("Enter your interests here: ")
 
-    if st.button("Predict"):
+    if st.button("Predict 	:crystal_ball:"):
         # Process the user input
         processed_input = text_pipeline(user_input)
         X = loaded_vector.transform([processed_input])
@@ -66,7 +66,7 @@ if tabs == 'Find Your Perfect Career Sector':
         sorted_combined = sorted(combined, key=lambda x: x[1], reverse=True)
         top_predictions = sorted_combined[:2]
         for i, (predicted_class, probability) in enumerate(top_predictions, start=1):
-            st.write(f"Prediction {i}: Career path '{predicted_class}'")
+            st.write(f":rainbow[*Prediction* {i}:] Career path :blue['{predicted_class}']")
 
         
          # Filter dataset by predicted sectors
@@ -75,7 +75,7 @@ if tabs == 'Find Your Perfect Career Sector':
          # Display dropdown for selecting sectors
         selected_sector = top_predictions[0][0]
 
-        st.subheader(f"Heatmap for '{selected_sector}' Jobs by State")
+        st.subheader("Top :red[States] in Predicted :red[Sectors]")
 
         sector_df = filtered_df[filtered_df['sector'] == selected_sector]
         states_count = sector_df['states'].value_counts()
@@ -107,7 +107,7 @@ if tabs == 'Find Your Perfect Career Sector':
 
         
        ###MAKE PIE CHARTS FOR PREDICTED SECTORS 
-        st.subheader("Top States in Predicted Sectors")
+        # st.subheader("Top :red[States] in Predicted :red[Sectors]")
         for sector in selected_sectors:
             sector_df = filtered_df[filtered_df['sector'] == sector]
             states_count = sector_df['location_state'].value_counts().head(10)
@@ -118,7 +118,7 @@ if tabs == 'Find Your Perfect Career Sector':
 
 
      # Display top 10 job titles in each predicted sector
-        st.subheader("Top 10 Job Titles in Predicted Sectors")
+        st.subheader("Top 10 :red[Job Titles] in Predicted :red[Sectors]")
         for sector in selected_sectors:
             top_jobs = filtered_df[filtered_df['sector'] == sector]['job_title'].value_counts().head(10)
             st.write(f"Top 10 Job Titles in '{sector}':")
@@ -135,14 +135,14 @@ if tabs == 'Find Your Perfect Career Sector':
 
 
 
-elif tabs == 'Generate Cover Letter':
+elif tabs == 'JobProphet':
     API_URL = "https://api-inference.huggingface.co/models/runaksh/ResumeClassification_distilBERT"
     API_TOKEN = os.getenv('API_TOKEN')  
     openai.api_key  = os.getenv('OPENAI_API_KEY')
     client = OpenAI()
    
 
-    st.subheader('Add your Resume and job description to get a tailored cover letter')
+    st.subheader('Resume classifier 	:memo: and Cover Letter Generator 	:printer:')
     
     job_desc = st.text_area("Copy paste the job description you're interested in")
 
@@ -151,7 +151,7 @@ elif tabs == 'Generate Cover Letter':
     
      #extract text from pdf
     if uploaded_file is not None:
-        st.write("File uploaded successfully!")
+        st.write("File uploaded successfully! ")
         reader = PdfReader(uploaded_file)
         page = reader.pages[0]
         text = page.extract_text()
@@ -161,18 +161,18 @@ elif tabs == 'Generate Cover Letter':
         return response.json()
 
 
-    if st.button("Unlock Career Suggestions"):
+    if st.button("Unlock Career Suggestions 	:unlock:"):
         if text:
             answer = query(text)
             labels = [item['label'] for item in answer[0][:3]]
                 # Displaying labels with corresponding sectors
             for idx, label in enumerate(labels, start=1):
-                st.write(f"Sector {idx}: {label}")
+                st.write(f"Sector :blue[{idx}:] :rainbow[{label}]")
         else:
                 st.write("Please upload a valid PDF file to extract text.")
 
     
-    if st.button("Generate AI Crafted Cover Letter"):
+    if st.button("Generate AI Crafted Cover Letter 	:robot_face:"):
 
             if job_desc and uploaded_file is not None:
                 prompt = f"Create a personalized cover letter based on the provided job description: {job_desc} and resume: {text} . Incorporate relevant details such as previous experience, skills, education, contact information (email and address) from the resume. Extract the company name and the position requirements from the job description to craft a tailored cover letter that highlights the qualifications in the resume and aligns with the job role."
@@ -207,15 +207,15 @@ elif tabs == 'Generate Cover Letter':
                 """
                 
                 st.markdown(css_styles, unsafe_allow_html=True)
-                st.subheader("Your Tailored Cover Letter")
+                st.subheader(":rainbow[Your Tailored Cover Letter]")
                 st.download_button('Download cover letter', answer)
                 st.markdown(f'<div class="cover-letter">{answer}</div>', unsafe_allow_html=True)
                     
    
-    if st.checkbox("Visualize Job Trends"):
+    if st.checkbox("Visualize Job Trends 	:bar_chart: :chart_with_upwards_trend:"):
                 
                 data_visualize_K = pd.read_csv('data/LocalPayNYC.csv')
-                st.header("Job Trends by demographics, Target City: NYC")
+                st.header(":rainbow[Job Trends by demographics,] :red[Target City: NYC]")
             
                 selected_factor = st.selectbox('Select a factor', ['gender', 'ethnicity', 'race'])
                 
@@ -231,7 +231,7 @@ elif tabs == 'Generate Cover Letter':
                     description_bar = "some notable observations would be white working more in skilled craft than other races, asians and black winning the technicians profession, asians and white significantly more administrators/officials than paraprofessionals. "
 
 
-                st.subheader("The Bar is high Plot")
+                st.subheader("The :blue[Bar] is high :blue[Plot]")
                 fig_bar = px.bar(data_visualize_K, x=selected_factor,color="job_category", barmode ="group",title=f"Distribution of Job Categories by {selected_factor}")
                
                 st.plotly_chart(fig_bar)
@@ -239,7 +239,7 @@ elif tabs == 'Generate Cover Letter':
                     st.write(description_bar)
 
                 # Display box plot and pie chart
-                st.subheader("Don't fit in the Box Plot")
+                st.subheader("Don't fit in the :blue[Box Plot]")
                 fig_box = px.box(data_visualize_K, x=selected_factor, y="upper_pay_band_bound", title=f"Pay Distribution by {selected_factor}")
                 st.plotly_chart(fig_box)
                 with st.expander("See explanation"):
