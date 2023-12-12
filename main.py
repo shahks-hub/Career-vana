@@ -23,7 +23,6 @@ st.title("Careers influenced by various factors over the years")
 
 
 
-
 # Find Your Perfect Career Sector tab
 if tabs == 'Find Your Perfect Career Sector':
     monster_df = pd.read_csv('data/monster_jobs.csv')
@@ -34,23 +33,7 @@ if tabs == 'Find Your Perfect Career Sector':
     loaded_model = pickle.load(open(filename, 'rb'))
     loaded_vector = pickle.load(open(filename2,'rb'))
 
-    state_name_to_code = {
-        'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR',
-        'California': 'CA', 'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE',
-        'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID',
-        'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS',
-        'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
-        'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
-        'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV',
-        'New Hampshire': 'NH', 'New Jersey': 'NJ', 'New Mexico': 'NM', 'New York': 'NY',
-        'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK',
-        'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
-        'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT',
-        'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV',
-        'Wisconsin': 'WI', 'Wyoming': 'WY', 'District of Columbia': 'DC'
-    }
-
-    monster_df['state_code'] = monster_df['cleaned_states'].map(state_name_to_code)
+   
 
     # Define functions for text preprocessing
     def make_lower(a_string):
@@ -59,7 +42,6 @@ if tabs == 'Find Your Perfect Career Sector':
     def remove_punctuation(a_string):    
         a_string = re.sub(r'[^\w\s]', '', a_string)
         return a_string
-
   
     # Text preprocessing function using TfidfVectorizer
     def text_pipeline(input_string):
@@ -86,10 +68,8 @@ if tabs == 'Find Your Perfect Career Sector':
         for i, (predicted_class, probability) in enumerate(top_predictions, start=1):
             st.write(f"Prediction {i}: Career path '{predicted_class}'")
 
-
-
         
-            # Filter dataset by predicted sectors
+         # Filter dataset by predicted sectors
         selected_sectors = [pred[0] for pred in top_predictions]
         filtered_df = monster_df[monster_df['sector'].isin(selected_sectors)]
          # Display dropdown for selecting sectors
@@ -98,18 +78,21 @@ if tabs == 'Find Your Perfect Career Sector':
         st.subheader(f"Heatmap for '{selected_sector}' Jobs by State")
 
         sector_df = filtered_df[filtered_df['sector'] == selected_sector]
-        states_count = sector_df['cleaned_states'].value_counts()
+        states_count = sector_df['states'].value_counts()
+        states_count = states_count.reset_index()
+        states_count.columns = ['states', 'count']
+        merged_df = pd.merge(sector_df[['states']], states_count, on='states', how='inner')
+        
 
-
+        
         fig_heatmap = px.choropleth(
-            sector_df,
-            locations='state_code',
+            merged_df,
+            locations='states',
             locationmode="USA-states",
-            color='cleaned_states',
+            color='count',
             scope="usa",
-            title=f"Heatmap for '{selected_sector}' Jobs by State",
-            color_continuous_scale='reds',  # You can adjust the color scale as needed
-            color_continuous_midpoint=max(states_count) / 2,  # Adjust midpoint based on your data
+            color_continuous_scale="Reds",
+            title=f"Heatmap for '{selected_sector}' Jobs by State"
         )
 
         fig_heatmap.update_layout(
@@ -127,7 +110,7 @@ if tabs == 'Find Your Perfect Career Sector':
         st.subheader("Top States in Predicted Sectors")
         for sector in selected_sectors:
             sector_df = filtered_df[filtered_df['sector'] == sector]
-            states_count = sector_df['cleaned_states'].value_counts().head(10)
+            states_count = sector_df['location_state'].value_counts().head(10)
         
        
             fig_pie = px.pie(values=states_count.values, names=states_count.index, title=f"Top 10 States in '{sector}'")
@@ -153,12 +136,11 @@ if tabs == 'Find Your Perfect Career Sector':
 
 
 elif tabs == 'Generate Cover Letter':
-    API_URL = "https://api-inference.huggingface.co/models/Sachinkelenjaguri/resume_classifier"
+    API_URL = "https://api-inference.huggingface.co/models/runaksh/ResumeClassification_distilBERT"
     API_TOKEN = os.getenv('API_TOKEN')  
     openai.api_key  = os.getenv('OPENAI_API_KEY')
     client = OpenAI()
-    MAX_SEQUENCE_LENGTH = 512
-
+   
 
     st.subheader('Add your Resume and job description to get a tailored cover letter')
     
@@ -174,111 +156,24 @@ elif tabs == 'Generate Cover Letter':
         page = reader.pages[0]
         text = page.extract_text()
 
-   
-    def get_sector_name(label):
-        label_to_sector = {
-            'LABEL_0': 'Advocate',
-            'LABEL_1': 'Arts',
-            'LABEL_2': 'Automation Testing',
-            'LABEL_3': 'Blockchain Engineer',
-            'LABEL_4': 'Business Analyst',
-            'LABEL_5': 'Civil Engineer',
-            'LABEL_6': 'Data Science',
-            'LABEL_7': 'Database Management',
-            'LABEL_8': 'DevOps Engineer',
-            'LABEL_9': 'DotNet Developer',
-            'LABEL_10': 'ETL Developer',
-            'LABEL_11': 'Electrical Engineering',
-            'LABEL_12': 'HR',
-            'LABEL_13': 'Hadoop Developer',
-            'LABEL_14': 'Health and fitness',
-            'LABEL_15': 'Java Developer',
-            'LABEL_16': 'Mechanical Engineer',
-            'LABEL_17': 'Network Security Engineer',
-            'LABEL_18': 'Operations Manager',
-            'LABEL_19': 'Project Management',
-            'LABEL_20': 'Python Developer',
-            'LABEL_21': 'SAP Developer',
-            'LABEL_22': 'Sales',
-            'LABEL_23': 'Testing Operations',
-            'LABEL_24': 'Web Designing'
-        }
-        return label_to_sector.get(label, 'Chilling/Unknown')
+    def query(payload):
+        response = requests.post(API_URL, headers={"Authorization": f"Bearer {API_TOKEN}"}, json=payload)
+        return response.json()
 
 
-    def extract_top_5(classification_responses):
-        if isinstance(classification_responses, list):
-            top_5_classifications = []
-            for response in classification_responses:
-                response_json = response.json()
-                sorted_responses = sorted(response_json, key=lambda x: x['score'], reverse=True)
-                top_5_classifications.extend(sorted_responses[:5])
-
-            top_5_classifications.sort(key=lambda x: x['score'], reverse=True)
-    
-            unique_sectors = set()
-            top_5_unique_sectors = []
-            for classification in top_5_classifications:
-                sector = get_sector_name(classification['label'])
-                if sector not in unique_sectors:
-                    unique_sectors.add(sector)
-                    top_5_unique_sectors.append({'sector': sector})
-                    if len(top_5_unique_sectors) == 5:
-                        break
-    
-            return top_5_unique_sectors
+    if st.button("Unlock Career Suggestions"):
+        if text:
+            answer = query(text)
+            labels = [item['label'] for item in answer[0][:3]]
+                # Displaying labels with corresponding sectors
+            for idx, label in enumerate(labels, start=1):
+                st.write(f"Sector {idx}: {label}")
         else:
-            response_json = classification_responses.json()
-            sorted_responses = sorted(response_json, key=lambda x: x['score'], reverse=True)
-            top_5_classifications = sorted_responses[:5]
-        
-            unique_sectors = set()
-            top_5_unique_sectors = []
-            for classification in top_5_classifications:
-                sector = get_sector_name(classification['label'])
-                if sector not in unique_sectors:
-                    unique_sectors.add(sector)
-                    top_5_unique_sectors.append({'sector': sector})
-                    if len(top_5_unique_sectors) == 5:
-                        break
-    
-            return top_5_unique_sectors
-
-
-
- 
-    if st.button("Step 1: Make sure your resume aligns to your sector "):
-
-            if uploaded_file:
-                data = {"text" : text}
-                if len(text) > MAX_SEQUENCE_LENGTH:
-                    chunks = [text[i:i+MAX_SEQUENCE_LENGTH] for i in range(0, len(text), MAX_SEQUENCE_LENGTH)]
-                    responses = []
-                    for chunk in chunks:
-                        
-                        response = requests.post(API_URL, headers={"Authorization": f"Bearer {API_TOKEN}"}, json={"text": chunk})
-                        responses.append(response)
-
-                    top_5_classifications = extract_top_5(responses)  # Function to extract top 5 classifications
-                  
-                else:
-                   
-                    response = requests.post(API_URL, headers={"Authorization": f"Bearer {API_TOKEN}"}, json=data)
-                    top_5_classifications = extract_top_5(response) 
-
-
-                st.subheader(f"Top 5 Resume Classifications:")
-                for classification in top_5_classifications:
-                    st.write(f"Predicted sectors: {classification['sector']} ")
-                   
-                    
-            else:
-                st.write("Please upload a resume first.")
-
-
+                st.write("Please upload a valid PDF file to extract text.")
 
     
-    if st.button("Step 2: Generate Cover Letter"):
+    if st.button("Generate AI Crafted Cover Letter"):
+
             if job_desc and uploaded_file is not None:
                 prompt = f"Create a personalized cover letter based on the provided job description: {job_desc} and resume: {text} . Incorporate relevant details such as previous experience, skills, education, contact information (email and address) from the resume. Extract the company name and the position requirements from the job description to craft a tailored cover letter that highlights the qualifications in the resume and aligns with the job role."
 
@@ -326,8 +221,8 @@ elif tabs == 'Generate Cover Letter':
                 
                 if selected_factor == 'gender':
                     data_visualize_K.loc[~data_visualize_K['gender'].isin(['Male', 'Female']), 'gender'] = 'Other gender'
-                    description_box = "Observations: People identifying as male tend to have the highest salaries followed by women and other genders."
-                    description_bar = "Observations: Highest percentage of all genders are professionals which could also mean that there is just more data on professionals. Some noteworthy comparisons is that there are more men in skilled craft than female and other gender. women least common professions are skilled craft and service maintenance. men least common are technicians and protective service while other genders least common are administrative support, technicians and skilled craft  "
+                    description_box = "People identifying as male tend to have the highest salaries followed by women and other genders."
+                    description_bar = "Highest percentage of all genders are professionals which could also mean that there is just more data on professionals. Some noteworthy comparisons is that there are more men in skilled craft than female and other gender. women least common professions are skilled craft and service maintenance. men least common are technicians and protective service while other genders least common are administrative support, technicians and skilled craft  "
                 elif selected_factor == 'ethnicity':
                     description_box = "Non-hispanic or latino tend to be paid the highest. there may be data bias because of the people choosing not to report their ethnicity"
                     description_bar = "Ignoring the common professionals,Non-hispanic or latino populations tend to work as paraprofessionals and officials/administrators and least in protective service and skilled craft. while hispanic or latinos are generally the same the difference in paraprofessionals and officials in less which means either of those categories are more common, while in non-hispanic/latinos more tend to lean towards paraprofessionals than officials/administrators   "
