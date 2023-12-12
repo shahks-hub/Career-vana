@@ -81,7 +81,7 @@ Embark on this educational adventure with our app, where every step is a burst o
 <!-- GETTING STARTED -->
 <h2 id="getting-started"> :book: Getting Started</h2>
 
-## We want to make it easy for you to work on bettering our app...here's how to begin!
+### We want to make it easy for you to work on bettering our app...here's how to begin!
 
 <p>Create an Environment:</p>
 <pre><code>python3 -m venv myenv</code></pre>
@@ -108,7 +108,7 @@ Embark on this educational adventure with our app, where every step is a burst o
 <!-- What We Used -->
 <h2 id="setup"> :floppy_disk: What We Used</h2>
 
-## These are the different tools we used and where you can find them for use on your own project:
+### These are the different tools we used and where you can find them for use on your own project:
 
 <ul>
   <li><b><a href="https://huggingface.co/">Hugging Face</a></b> - Provided the model for our Cover Letter Generator</li>
@@ -120,7 +120,7 @@ Embark on this educational adventure with our app, where every step is a burst o
   <li><b><a href="https://openai.com/">OpenAI</b> - </li>
 </ul>
 
-## Along the way, we relied heavily on a diverse set of resources...and here they are:
+### Along the way, we relied heavily on a diverse set of resources...and here they are:
 
 <ul>
   <li><b><a href="https://plotly.com/python/plotly-express/">Plotly</b> - A great reference point for several types of visual models</li>
@@ -132,13 +132,13 @@ Embark on this educational adventure with our app, where every step is a burst o
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
 <!-- SETUP -->
-<h2 id="setup"> :smiley_face: Who We Are</h2>
+<h2 id="setup"> :bowtie: Who We Are</h2>
 
-## This the team that brought you this project, in all their glory:
+### This is the team that brought you this project, in all their glory:
 
 <ul>
   <li><b><a href="https://brendancostello.github.io/portfolio/">Brendan Costello</a></b> - Wrote the README.md (Hello!) and provided a generally enjoyable experience for all involved</li>
-  <li><b><a href="https://brendancostello.github.io/portfolio/">Henry Joseph Dugue</a></b> - Geographic expert extraordinaire and the best friend you never new you needed</li>
-<li><b><a href="https://brendancostello.github.io/portfolio/">Kasaf Shah</a></b> - The genius herself! Wrote the model while leaving everyone in her orbit just a little bit smarter</li>
+  <li><b><a href="https://www.linkedin.com/in/henry-d-5665071ba/">Henry Joseph Dugue</a></b> - Geographic expert extraordinaire and the best friend you never new you needed</li>
+<li><b><a href="https://www.linkedin.com/in/kasaf-shah/">Kasaf Shah</a></b> - The genius herself! Wrote the model while leaving everyone in her orbit just a little bit smarter</li>
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
