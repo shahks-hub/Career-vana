@@ -17,7 +17,10 @@
 <h2 id="about-the-project"> :pencil: About The Project</h2>
 
 <p align="justify"> 
-  It can be challenging to understand how your tech skills might translate into different roles within the tech sector. Our app aims to help you gain insights on where the best jobs for your skill sets are, and what kind of roles you can expect to be competitive for. Furthermore, with the job recommendations we provide, and a .pdf of your resume, we can take the burden of writing individual cover letters for each posting off your plate by generating a tailored cover letter for each posting you choose.
+Unlock the full potential of your tech prowess with our revolutionary application! Navigating the diverse landscape of the tech sector can be daunting, but fear not—our app is your key to decoding the perfect career path. Seamlessly translating your skills into a spectrum of lucrative roles, we empower you to discover the most coveted positions aligned with your expertise.
+</p>
+<p align="justify">
+But that's not all—we go above and beyond by transforming your resume into a powerful weapon. With a simple upload, our app crafts personalized cover letters for each job posting, sparing you the tedious task of manual customization. Elevate your job search game and embark on a tech career journey like never before!
 </p>
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
