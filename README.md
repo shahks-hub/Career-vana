@@ -38,10 +38,10 @@ Welcome to the Career-vana App, where your journey to crafting a custom cover le
    - Click on the `Sector Selector` tab to enter the world of possibilities.
 
 2. **Enter Your Tech Skills:**
-   - In the `Enter Your Tech Skills` text box, vividly describe the tech skills you master or are eager to explore.
+   - In the `Enter Your Tech Skills` text box, vividly describe the tech skills you have mastered or are eager to explore.
 
 3. **Witness the Magic Unfold:**
-   - As you enter your skills, the app will provide valuable insights and colorful information about your skill sets and relevant job postings.
+   - As you enter your skills, the app will provide valuable insights and colorful information about your skill sets with relevant job postings that work with out `Cover Letter Generator`.
 
 ### Step 2: Craft Your Unique Cover Letter
 
