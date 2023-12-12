@@ -68,7 +68,7 @@
 <h2 id="setup"> :floppy_disk: What We Used</h2>
 
 <ul>
-  <li><b><a href="https://huggingface.co/">Hugging Face</a></b> - </li>
+  <li><b><a href="https://huggingface.co/">Hugging Face</a></b> - Provided the model for our Cover Letter Generator</li>
   <li><b><a href="https://streamlit.io//">Streamlit</b> - We coded our app on Streamlit and every part of it exists within a Streamlit framework</li>
   <li><b><a href="https://jupyter.org/">Jupyter Notebook</b> - We used Jupyter Notebook to model our data so that we could plug the results into Streamlit.</li>
   <li><b><a href="https://pandas.pydata.org/">Pandas</b> - We would not be able to model our data without the Pandas library.</li>
@@ -79,12 +79,10 @@
 
 <h3>Some of our most valuable references</h3>
 <ul>
-  <li><b><a href="https://plotly.com/python/plotly-express/">Plotly</b> - </li>
-  <li><b><a href="https://chat.openai.com/">ChatGPT</b> - </li>
-  <li><b><a href="https://docs.streamlit.io/library/advanced-features/theming">Streamlit Themeing</b> - </li>
+  <li><b><a href="https://plotly.com/python/plotly-express/">Plotly</b> - A great reference point for several types of visual models</li>
+  <li><b><a href="https://chat.openai.com/">ChatGPT</b> - Every time we got stuck on a bit of code, ChatGPT was there to help us out.</li>
+  <li><b><a href="https://docs.streamlit.io/library/advanced-features/theming">Streamlit Themeing</b> - Valuable for helping to adjust the theme of your streamlit app</li>
   <li><b><a href="https://www.kaggle.com/">Kaggle</b> - Where we went to find the datasets for our visuals and to train our models.</li>
-  <li><b><a href="https://chat.openai.com/">ChatGPT</b> - </li>
-  <li><b><a href="https://chat.openai.com/">ChatGPT</b> - </li>
 </ul>
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
