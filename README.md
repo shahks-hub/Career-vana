@@ -111,13 +111,13 @@ Embark on this educational adventure with our app, where every step is a burst o
 ### These are the different tools we used and where you can find them for use on your own project:
 
 <ul>
-  <li><b><a href="https://huggingface.co/">Hugging Face</a></b> - Provided the model for our Cover Letter Generator</li>
-  <li><b><a href="https://streamlit.io//">Streamlit</b> - We coded our app on Streamlit and every part of it exists within a Streamlit framework</li>
-  <li><b><a href="https://jupyter.org/">Jupyter Notebook</b> - We used Jupyter Notebook to model our data so that we could plug the results into Streamlit.</li>
-  <li><b><a href="https://pandas.pydata.org/">Pandas</b> - We would not be able to model our data without the Pandas library.</li>
+  <li><b><a href="https://huggingface.co/">Hugging Face</a></b> - Used a model from Hugging Face for our Cover Letter Generator</li>
+  <li><b><a href="https://streamlit.io//">Streamlit</b> - Without Streamlit, there would be no app! Everything is coded in Streamlit</li>
+  <li><b><a href="https://jupyter.org/">Jupyter Notebook</b> - We used Jupyter Notebook to model our data</li>
+  <li><b><a href="https://pandas.pydata.org/">Pandas</b> - We would not be able to model our data in Jupyter Notebook without the Pandas library.</li>
   <li><b><a href="https://numpy.org/">Numpy</b> - Every bit as crucial to our data modeling as Pandas.</li>
-  <li><b><a href="https://scikit-learn.org/stable/">Scikit-Learn</b> - </li>
-  <li><b><a href="https://openai.com/">OpenAI</b> - </li>
+  <li><b><a href="https://scikit-learn.org/stable/">Scikit-Learn</b> - We used it, but that doesn't mean what we did made it into our app...</li>
+  <li><b><a href="https://openai.com/">OpenAI</b> - Used an OpenAI model to generate the cover letter</li>
 </ul>
 
 ### Along the way, we relied heavily on a diverse set of resources...and here they are:
@@ -125,7 +125,7 @@ Embark on this educational adventure with our app, where every step is a burst o
 <ul>
   <li><b><a href="https://plotly.com/python/plotly-express/">Plotly</b> - A great reference point for several types of visual models</li>
   <li><b><a href="https://chat.openai.com/">ChatGPT</b> - Every time we got stuck on a bit of code, ChatGPT was there to help us out.</li>
-  <li><b><a href="https://docs.streamlit.io/library/advanced-features/theming">Streamlit Theming</b> - Valuable for helping to adjust the theme of your streamlit app</li>
+  <li><b><a href="https://docs.streamlit.io/library/advanced-features/theming">Streamlit Theming</b> - Valuable for helping to adjust the theme of our streamlit app</li>
   <li><b><a href="https://www.kaggle.com/">Kaggle</b> - Where we went to find the datasets for our visuals and to train our models.</li>
 </ul>
 

@@ -65,8 +65,8 @@ def extract_text_from_pdf(uploaded_file):
 
 
 ##Loading all data in dataframe
-data_visualize_K = load_data('data/LocalPayNYC.csv')
-monster_df = load_data('data/monster_jobs.csv')
+data_visualize_K = load_data('data/processed/LocalPayNYC.csv')
+monster_df = load_data('data/processed/monster_jobs.csv')
 
 
 #Find Your Perfect Career Sector tab
@@ -82,8 +82,8 @@ if tabs == 'CareerProphet':
    
 
     # Load the model and initialize TfidfVectorizer
-    filename = 'pickled_models/finalized_model.sav'
-    filename2 = 'pickled_models/finalized_vector.sav'
+    filename = 'models/finalized_model.sav'
+    filename2 = 'models/finalized_vector.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
     loaded_vector = pickle.load(open(filename2,'rb'))
 
