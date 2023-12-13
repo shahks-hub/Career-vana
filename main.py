@@ -214,8 +214,10 @@ if tabs == 'CareerProphet':
 
 elif tabs == 'JobProphet':
     API_URL = "https://api-inference.huggingface.co/models/runaksh/ResumeClassification_distilBERT"
-    API_TOKEN = os.getenv('API_TOKEN')  
-    openai.api_key  = os.getenv('OPENAI_API_KEY')
+    # API_TOKEN = os.getenv('API_TOKEN')  
+    API_TOKEN = st.secrets["API_TOKEN"]
+    openai.api_key  = st.secrets["OPENAI_API_KEY"]
+    # openai.api_key  = os.getenv('OPENAI_API_KEY')
     client = OpenAI()
    
 
