@@ -44,7 +44,7 @@ Welcome to the Career-vana App, where your journey to crafting a custom cover le
    - In the `Enter Your Interests Here` text box, vividly describe the tech skills you have mastered or are eager to explore.
 
 3. **Witness the Magic Unfold:**
-   - As you enter your skills, the app will provide valuable insights and colorful information about your skill sets with relevant job postings that work with out `JobProphet`.
+   - As you enter your skills, the app will provide valuable insights and colorful information about your skill sets with relevant job postings that work with our `JobProphet`.
 
 ### Step 2: Craft Your Unique Cover Letter
 
@@ -52,7 +52,7 @@ Welcome to the Career-vana App, where your journey to crafting a custom cover le
    - Move to the `JobProphet` tab where creativity meets professionalism.
 
 2. **Select a Job Posting:**
-   - Choose a job posting that resonates with your aspirations.
+   - Choose a job posting that resonates with your aspirations from the CareerProphet tab.
 
 3. **Enter Job Description:**
    - In the `Job Description` text box, transcribe the chosen job posting, and watch the app weave its magic.
@@ -111,13 +111,13 @@ Embark on this educational adventure with our app, where every step is a burst o
 ### These are the different tools we used and where you can find them for use on your own project:
 
 <ul>
-  <li><b><a href="https://huggingface.co/">Hugging Face</a></b> - Used a model from Hugging Face for our Cover Letter Generator</li>
+  <li><b><a href="https://huggingface.co/">Hugging Face</a></b> - Used a model from Hugging Face to classify resumes and make sure they have the right keywords</li>
   <li><b><a href="https://streamlit.io//">Streamlit</b> - Without Streamlit, there would be no app! Everything is coded in Streamlit</li>
-  <li><b><a href="https://jupyter.org/">Jupyter Notebook</b> - We used Jupyter Notebook to model our data</li>
+  <li><b><a href="https://jupyter.org/">Jupyter Notebook</b> - We used Jupyter Notebook to train a model and clean our datasets</li>
   <li><b><a href="https://pandas.pydata.org/">Pandas</b> - We would not be able to model our data in Jupyter Notebook without the Pandas library.</li>
   <li><b><a href="https://numpy.org/">Numpy</b> - Every bit as crucial to our data modeling as Pandas.</li>
   <li><b><a href="https://scikit-learn.org/stable/">Scikit-Learn</b> - We used it, but that doesn't mean what we did made it into our app...</li>
-  <li><b><a href="https://openai.com/">OpenAI</b> - Used an OpenAI model to generate the cover letter</li>
+  <li><b><a href="https://openai.com/">OpenAI</b> - Used OpenAI API to generate the cover letter</li>
 </ul>
 
 ### Along the way, we relied heavily on a diverse set of resources...and here they are:
@@ -137,7 +137,7 @@ Embark on this educational adventure with our app, where every step is a burst o
 ### This is the team that brought you this project, in all their glory:
 
 <ul>
-  <li><b><a href="https://brendancostello.github.io/portfolio/">Brendan Costello</a></b> - Wrote README (Hello!) and provided a generally enjoyable experience for all involved</li>
+  <li><b><a href="https://brendancostello.github.io/portfolio/">Brendan Costello</a></b> - Wrote README (Hello!) and provided a generally enjoyable experience for all involved along with general project management, deployment, introducing ideas to be implemented.</li>
   <li><b><a href="https://www.linkedin.com/in/henry-d-5665071ba/">Henry Joseph Dugue</a></b> - Geographic expert extraordinaire and the best friend you never new you needed</li>
 <li><b><a href="https://www.linkedin.com/in/kasaf-shah/">Kasaf Shah</a></b> - The genius herself! Wrote the model while leaving everyone in her orbit just a little bit smarter</li>
 
